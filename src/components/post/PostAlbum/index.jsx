@@ -13,7 +13,14 @@ const PostAlubm = ({ postsList }) => {
             <S.PostAlbumItem key={id}>
               {images.length >= 2 && <S.ImageLayerIcon />}
               <Link to={`/postdetail/${id}`}>
-                <S.AlbumImg src={images[0]} alt='' />
+                <S.AlbumImg
+                  src={
+                    images[0].includes('mandarin.api')
+                      ? images[0].replace('mandarin.api', 'api.mandarin')
+                      : images[0]
+                  }
+                  alt=''
+                />
               </Link>
             </S.PostAlbumItem>
           ))}

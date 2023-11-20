@@ -6,7 +6,7 @@ const FollowUser = ({ image, accountname, username, intro, isfollow }) => {
   const [follow, setFollow] = useState(isfollow);
 
   const onErrorImg = (e) => {
-    e.target.src = 'https://mandarin.api.weniv.co.kr/1671431659709.png';
+    e.target.src = 'https://api.mandarin.weniv.co.kr/1671431659709.png';
   };
 
   const handleFollow = async () => {
@@ -23,7 +23,11 @@ const FollowUser = ({ image, accountname, username, intro, isfollow }) => {
     <S.User>
       <S.StyleLink to={`/profile/${accountname}`}>
         <S.UserImage
-          src={image}
+          src={
+            image.includes('mandarin.api')
+              ? image.replace('mandarin.api', 'api.mandarin')
+              : image
+          }
           alt='사용자 프로필 이미지'
           onError={onErrorImg}
         />

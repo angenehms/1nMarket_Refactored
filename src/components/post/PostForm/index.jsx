@@ -22,7 +22,7 @@ const PostForm = ({ content, setContent, imgFiles, setImgFiles }) => {
 
     setImgFiles((prev) => [
       ...prev,
-      `https://mandarin.api.weniv.co.kr/${data.filename}`,
+      `https://api.mandarin.weniv.co.kr/${data.filename}`,
     ]);
   };
 
@@ -30,10 +30,16 @@ const PostForm = ({ content, setContent, imgFiles, setImgFiles }) => {
     setImgFiles((prev) => prev.filter((_, i) => idx !== i));
   };
 
+  const profileImg = JSON.parse(localStorage.getItem('profile-img'));
+
   return (
     <S.Conatiner>
       <S.ProfileImg
-        src={JSON.parse(localStorage.getItem('profile-img'))}
+        src={
+          profileImg.includes('mandarin.api')
+            ? profileImg.replace('mandarin.api', 'api.mandarin')
+            : profileImg
+        }
         alt='사용자 이미지'
       />
       <S.PostForm>
@@ -58,7 +64,14 @@ const PostForm = ({ content, setContent, imgFiles, setImgFiles }) => {
         <S.ImgList>
           {imgFiles?.map((img, i) => (
             <S.ImgItem key={img.slice(10)}>
-              <S.PostImg src={img} alt='' />
+              <S.PostImg
+                src={
+                  img.includes('mandarin.api')
+                    ? img.replace('mandarin.api', 'api.mandarin')
+                    : img
+                }
+                alt=''
+              />
               <S.RemoveButton type='button' onClick={() => handleRemoveImg(i)}>
                 <span className='ir'>이미지 삭제</span>
               </S.RemoveButton>

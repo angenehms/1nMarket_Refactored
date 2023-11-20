@@ -48,7 +48,7 @@ const ProfileInfo = () => {
   };
 
   const onErrorImg = (e) => {
-    e.target.src = 'https://mandarin.api.weniv.co.kr/1671431659709.png';
+    e.target.src = 'https://api.mandarin.weniv.co.kr/1671431659709.png';
   };
 
   return (
@@ -59,7 +59,11 @@ const ProfileInfo = () => {
           <S.CountInfo>followers</S.CountInfo>
         </S.CustomLink>
         <S.ProfileImg
-          src={image}
+          src={
+            image.includes('mandarin.api')
+              ? image.replace('mandarin.api', 'api.mandarin')
+              : image
+          }
           alt={`${accountname}의 프로필 사진`}
           onError={onErrorImg}
         />

@@ -12,7 +12,7 @@ const ImageSlide = ({ images }) => {
   };
 
   const onErrorImg = (e) => {
-    e.target.src = 'https://mandarin.api.weniv.co.kr/1672556398304.png';
+    e.target.src = 'https://api.mandarin.weniv.co.kr/1672556398304.png';
   };
 
   return (
@@ -22,7 +22,15 @@ const ImageSlide = ({ images }) => {
           <React.Fragment key={i}>
             {image && (
               <S.SlideItem>
-                <S.PostImage src={image} alt='' onError={onErrorImg} />
+                <S.PostImage
+                  src={
+                    image.includes('mandarin.api')
+                      ? image.replace('mandarin.api', 'api.mandarin')
+                      : image
+                  }
+                  alt=''
+                  onError={onErrorImg}
+                />
               </S.SlideItem>
             )}
           </React.Fragment>

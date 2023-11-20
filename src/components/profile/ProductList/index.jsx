@@ -23,7 +23,7 @@ const ProductList = () => {
   }, [accountname]);
 
   const onErrorImg = (e) => {
-    e.target.src = 'https://mandarin.api.weniv.co.kr/1672556398304.png';
+    e.target.src = 'https://api.mandarin.weniv.co.kr/1672556398304.png';
   };
 
   return (
@@ -37,7 +37,14 @@ const ProductList = () => {
                 <Fragment key={product.id}>
                   <S.ProductItem onClick={() => setOpenModal(true)}>
                     <S.ProductListImg
-                      src={product.itemImage}
+                      src={
+                        product.itemImage.includes('mandarin.api')
+                          ? product.itemImage.replace(
+                              'mandarin.api',
+                              'api.mandarin',
+                            )
+                          : product.itemImage
+                      }
                       alt=''
                       onError={onErrorImg}
                     />

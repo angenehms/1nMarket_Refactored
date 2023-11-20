@@ -3,7 +3,7 @@ import * as S from './style';
 
 function CommentList({ comments }) {
   const onErrorImg = (e) => {
-    e.target.src = 'https://mandarin.api.weniv.co.kr/1671431659709.png';
+    e.target.src = 'https://api.mandarin.weniv.co.kr/1671431659709.png';
   };
 
   return (

@@ -31,7 +31,11 @@ const PostItem = ({ post, setPostsList }) => {
       <S.PostArticle>
         <S.AuthorInfo>
           <S.AuthorProfileLink to={`/profile/${post.author.accountname}`}>
-            <S.AuthorImage src={post.author.image} />
+            <S.AuthorImage src={
+            post.author.image.includes('mandarin.api')
+              ? post.author.image.replace('mandarin.api', 'api.mandarin')
+              : post.author.image
+          } />
             <S.AuthorNameWrapper>
               <S.UserName>{post.author.username}</S.UserName>
               <S.AccountName>{post.author.accountname}</S.AccountName>

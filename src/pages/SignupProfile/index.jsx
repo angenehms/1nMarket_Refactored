@@ -13,7 +13,7 @@ const SignupProfile = () => {
   const [accountname, setAccountname] = useState('');
   const [intro, setIntro] = useState('');
   const [profileImg, setProfileImg] = useState(
-    'https://mandarin.api.weniv.co.kr/1671431659709.png',
+    'https://api.mandarin.weniv.co.kr/1671431659709.png',
   );
   const [canSave, setCanSave] = useState(false);
 

@@ -32,7 +32,7 @@ const ProductForm = ({
     // 업로드 취소시 나타나는 엑스박스 이미지 없애기 위한 조건문
     if (!e.target.files[0]) return setImgFiles('');
 
-    setImgFiles(`https://mandarin.api.weniv.co.kr/${data.filename}`);
+    setImgFiles(`https://api.mandarin.weniv.co.kr/${data.filename}`);
   };
 
   // 가격에 컴마 찍기

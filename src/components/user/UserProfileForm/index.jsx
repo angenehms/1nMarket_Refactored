@@ -38,7 +38,7 @@ const UserProfileForm = ({
       data: { filename },
     } = await axiosImgUpload.post('/image/uploadfile', form);
 
-    setProfileImg(`https://mandarin.api.weniv.co.kr/${filename}`);
+    setProfileImg(`https://api.mandarin.weniv.co.kr/${filename}`);
   };
 
   // 계정 ID 중복확인
@@ -117,7 +117,14 @@ const UserProfileForm = ({
       <S.ProfileForm>
         <S.FileWrapper>
           <S.FileLabel htmlFor='profileImg'>
-            <S.ProfileImg src={profileImg} alt='프로필 사진' />
+            <S.ProfileImg
+              src={
+                profileImg.includes('mandarin.api')
+                  ? profileImg.replace('mandarin.api', 'api.mandarin')
+                  : profileImg
+              }
+              alt='프로필 사진'
+            />
           </S.FileLabel>
           <input
             id='profileImg'

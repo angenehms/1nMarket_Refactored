@@ -7,7 +7,7 @@ import { ReactComponent as LikeIcon } from 'assets/icons/heart.svg';
 import { ReactComponent as CommentIcon } from 'assets/icons/message-circle.svg';
 import { MyPostModal, PostModal } from 'components';
 
-const PostItem = ({ post, setPostsList }) => {
+const PostItem = ({ post }) => {
   const [openModal, setOpenModal] = useState(false);
   const [heart, setHeart] = useState(post.hearted || false);
   const [heartCount, setHearCount] = useState(post.heartCount || 0);
@@ -74,7 +74,6 @@ const PostItem = ({ post, setPostsList }) => {
           <MyPostModal
             setOpenModal={setOpenModal}
             postId={post.id}
-            setPostsList={setPostsList}
             post={post}
           />
         ) : (

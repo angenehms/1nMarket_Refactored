@@ -1,13 +1,12 @@
 import React from 'react';
 import { axiosPrivate } from 'apis/axios';
 import AlertModalLayout from '../AlertModalLayout';
+import { useDispatch } from 'react-redux';
+import { ActionObj_PostRemoveModal } from 'store';
 
-const PostRemoveModal = ({
-  postId,
-  setOpenModal,
-  setOpenAlert,
-  setPostsList,
-}) => {
+const PostRemoveModal = ({ postId, setOpenModal, setOpenAlert }) => {
+  const dispatch = useDispatch();
+
   const handleCancel = () => {
     setOpenAlert(false);
     setOpenModal(false);
@@ -17,7 +16,7 @@ const PostRemoveModal = ({
     await axiosPrivate.delete(`post/${postId}`);
     setOpenAlert(false);
     setOpenModal(false);
-    setPostsList((prev) => prev.filter(({ id }) => id !== postId));
+    dispatch(ActionObj_PostRemoveModal(postId));
   };
 
   return (

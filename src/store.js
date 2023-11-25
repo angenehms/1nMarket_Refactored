@@ -1,21 +1,70 @@
-import { createStore } from "redux";
+import { createStore } from 'redux';
 
-function reducer( currentState, action ) {
+export const ActionObj_Home = (posts) => ({
+  type: 'Home_Page_SetPostsList',
+  payload: posts,
+});
 
-    if ( currentState === undefined ) {
-        return {
-            name : 1 // 스테이트 초깃값
-        }
-    }
+export const ActionObj_MyPosts = (post) => ({
+  type: 'MyPosts_Components_SetPostsList',
+  payload: post,
+});
 
-    const newState = { ...currentState };
+export const ActionObj_Post = (post) => ({
+  type: 'Post_Page_SetPostsList',
+  payload: post,
+});
 
-    if ( action.type === "" ) {
-        newState.number++;
-    }
+export const ActionObj_PostRemoveModal = (postId) => ({
+  type: 'PostRemoveModal_Components_SetPostsList',
+  payload: postId,
+});
 
-    return newState;
+export const store = createStore(function (currentState, action) {
+  if (currentState === undefined) {
+    // 스테이트 저장공간
+    return {
+      postsList: [],
+      myPostsList: [],
+      postPagePost: [],
+    };
+  }
 
-}
+  const newState = { ...currentState };
 
-export const store = createStore(reducer);
+  if (action.type === 'Home_Page_SetPostsList') {
+    newState.postsList = [...newState.postsList, ...action.payload];
+  }
+
+  if (action.type === 'MyPosts_Components_SetPostsList') {
+    newState.myPostsList = [...action.payload];
+  }
+
+  if (action.type === 'Post_Page_SetPostsList') {
+    newState.postPagePost = [action.payload];
+  }
+
+  if (action.type === 'PostRemoveModal_Components_SetPostsList') {
+    newState.myPostsList = newState.myPostsList.filter(
+      ({ id }) => id !== action.payload,
+    );
+  }
+
+  //     newState.postsList = (prev) =>
+  //       prev.filter(({ id }) => id !== action.payload);
+  //   }
+
+  //   if (action.type === 'CommentInput_Components_SetPostsList') {
+  //     newState.postsList = (prev) => [
+  //       {
+  //         ...prev[0],
+  //         commentCount: prev[0].commentCount + 1,
+  //       },
+  //     ];
+  //   }
+
+  return newState;
+});
+
+// dispatch(forParams(postId));
+// dispatch 는 인자로 객체를 받고 그 객체의 이름은 리듀서의 인자인 action 이다.

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { axiosPrivate } from 'apis/axios';
 import { PostsList, PostAlbum } from 'components';
-
 import * as S from './style';
+import { axiosPrivate } from 'apis/axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { ActionObj_MyPosts } from 'store';
 
 const MyPosts = () => {
+  const dispatch = useDispatch();
+  const postsList = useSelector((state) => state.myPostsList);
   const { accountname } = useParams();
-  const [postsList, setPostsList] = useState([]);
   const [selectList, setSelectList] = useState(true);
   const filteredPostsList = postsList.filter((item) => item.image);
 
@@ -17,7 +19,7 @@ const MyPosts = () => {
         data: { post },
       } = await axiosPrivate.get(`/post/${accountname}/userpost`);
 
-      setPostsList(post);
+      dispatch(ActionObj_MyPosts(post));
     };
     getAllPosts();
   }, [accountname]);
@@ -40,7 +42,7 @@ const MyPosts = () => {
         </S.PostHeader>
       </S.HeaderWrapper>
       {selectList ? (
-        <PostsList postsList={postsList} setPostsList={setPostsList} />
+        <PostsList postsList={postsList} />
       ) : (
         <PostAlbum postsList={filteredPostsList} />
       )}

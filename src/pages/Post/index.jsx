@@ -10,19 +10,23 @@ import {
 } from 'components';
 import { useTitle } from 'hooks';
 import * as S from './style';
+import { useDispatch, useSelector } from 'react-redux';
+import { ActionObj_Post } from 'store';
 
 const Post = () => {
   useTitle('1nMarket - Post');
+  const dispatch = useDispatch(); // 리덕스
+  const postsList = useSelector((state) => state.postPagePost);
   const { postId } = useParams();
   const [openModal, setOpenModal] = useState(false);
-  const [postsList, setPostsList] = useState([]);
   const [comments, setComments] = useState([]);
 
   const getPostData = async () => {
     const {
       data: { post },
     } = await axiosPrivate.get(`/post/${postId}`);
-    setPostsList([post]);
+
+    dispatch(ActionObj_Post(post));
   };
 
   const getComments = async () => {
@@ -33,7 +37,7 @@ const Post = () => {
   };
 
   useEffect(() => {
-    getPostData();
+    getPostData(); // 리덕스
     getComments();
   }, []);
 
@@ -41,18 +45,14 @@ const Post = () => {
     <>
       <ProfileHeader setOpenModal={setOpenModal} />
       <S.PostContainer>
-        <PostsList postsList={postsList} setPostsList={setPostsList} />
+        <PostsList postsList={postsList} />
         <CommentBox
           postId={postId}
           comments={comments}
           setComments={setComments}
         />
       </S.PostContainer>
-      <CommentInput
-        setPostsList={setPostsList}
-        postId={postId}
-        setComments={setComments}
-      />
+      <CommentInput postId={postId} setComments={setComments} />
       {openModal && <ProfileModal setOpenModal={setOpenModal} />}
     </>
   );

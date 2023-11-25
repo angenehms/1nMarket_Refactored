@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { axiosPrivate } from 'apis/axios';
 import * as S from './style';
+import { useDispatch } from 'react-redux';
 
-const CommentInput = ({ setPostsList, postId, setComments }) => {
+const CommentInput = ({ postId, setComments }) => {
+  const dispatch = useDispatch();
   const image = JSON.parse(localStorage.getItem('profile-img'));
   const [txt, setTxt] = useState('');
 
@@ -22,12 +24,7 @@ const CommentInput = ({ setPostsList, postId, setComments }) => {
       }),
     );
     setComments((prev) => [comment, ...prev]);
-    setPostsList((prev) => [
-      {
-        ...prev[0],
-        commentCount: prev[0].commentCount + 1,
-      },
-    ]);
+    dispatch({type: 'CommentInput_Components_SetPostsList'})
     setTxt('');
   };
 

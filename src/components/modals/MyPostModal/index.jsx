@@ -2,7 +2,7 @@ import { useState } from 'react';
 import * as S from './style';
 import { ModalLayout, PostRemoveModal } from 'components';
 
-const MyPostModal = ({ setOpenModal, postId, setPostsList, post }) => {
+const MyPostModal = ({ setOpenModal, postId, post }) => {
   const [openAelrt, setOpenAlert] = useState(false);
 
   return (
@@ -20,7 +20,6 @@ const MyPostModal = ({ setOpenModal, postId, setPostsList, post }) => {
           postId={postId}
           setOpenModal={setOpenModal}
           setOpenAlert={setOpenAlert}
-          setPostsList={setPostsList}
         />
       )}
     </>

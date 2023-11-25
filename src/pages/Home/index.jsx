@@ -2,9 +2,12 @@ import React, { useRef, useEffect, useState } from 'react';
 import { HomeHeader, PostsList } from 'components';
 import { axiosPrivate } from 'apis/axios';
 import * as S from './style';
+import { useDispatch, useSelector } from 'react-redux';
+import { ActionObj_Home } from 'store';
 
 const Home = () => {
-  const [postsList, setPostList] = useState([]);
+  const dispatch = useDispatch();
+  const postsList = useSelector((state)=>state.postsList)
   const [hasNextFeed, setHasNextFeed] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const page = useRef(0);
@@ -17,7 +20,8 @@ const Home = () => {
       const {
         data: { posts },
       } = await axiosPrivate.get(`/post/feed/?limit=10&skip=${page.current}`);
-      setPostList((prev) => [...prev, ...posts]);
+      dispatch(ActionObj_Home(posts))
+      // setPostList((prev) => [...prev, ...posts]);
       setHasNextFeed(posts.length % 10 === 0);
       setIsLoading(false);
       page.current += 10;
@@ -42,7 +46,7 @@ const Home = () => {
         {isLoading ? (
           <></>
         ) : postsList.length ? (
-          <PostsList postsList={postsList} />
+          <PostsList postsList={postsList}/>
         ) : (
           <S.NoneFeedBox>
             <S.NoneFeedAlert>유저를 검색해 팔로우 해보세요!</S.NoneFeedAlert>

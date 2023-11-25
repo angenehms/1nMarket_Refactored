@@ -24,14 +24,21 @@ const CommentInput = ({ postId, setComments }) => {
       }),
     );
     setComments((prev) => [comment, ...prev]);
-    dispatch({type: 'CommentInput_Components_SetPostsList'})
+    dispatch({ type: 'CommentInput_Components_SetPostsList' });
     setTxt('');
   };
 
   return (
     <S.FooterConatiner>
       <S.InputSection>
-        <S.ProfileImg src={image} alt='프로필 이미지' />
+        <S.ProfileImg
+          src={
+            image.includes('mandarin.api')
+              ? image.replace('mandarin.api', 'api.mandarin')
+              : image
+          }
+          alt='프로필 이미지'
+        />
         <S.InputText
           type='text'
           placeholder='댓글 입력하기...'

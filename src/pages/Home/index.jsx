@@ -7,7 +7,7 @@ import { ActionObj_Home } from 'store';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const postsList = useSelector((state)=>state.postsList)
+  const postsList = useSelector((state) => state.postsList);
   const [hasNextFeed, setHasNextFeed] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const page = useRef(0);
@@ -20,7 +20,7 @@ const Home = () => {
       const {
         data: { posts },
       } = await axiosPrivate.get(`/post/feed/?limit=10&skip=${page.current}`);
-      dispatch(ActionObj_Home(posts))
+      dispatch(ActionObj_Home(posts));
       // setPostList((prev) => [...prev, ...posts]);
       setHasNextFeed(posts.length % 10 === 0);
       setIsLoading(false);
@@ -39,6 +39,10 @@ const Home = () => {
     };
   }, [hasNextFeed]);
 
+  useEffect(() => {
+    dispatch({ type: 'Home_Page_SetPostsList_CleanUp' });
+  }, []);
+
   return (
     <>
       <HomeHeader />
@@ -46,7 +50,7 @@ const Home = () => {
         {isLoading ? (
           <></>
         ) : postsList.length ? (
-          <PostsList postsList={postsList}/>
+          <PostsList postsList={postsList} />
         ) : (
           <S.NoneFeedBox>
             <S.NoneFeedAlert>유저를 검색해 팔로우 해보세요!</S.NoneFeedAlert>

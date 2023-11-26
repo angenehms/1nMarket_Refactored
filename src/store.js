@@ -36,6 +36,10 @@ export const store = createStore(function (currentState, action) {
     newState.postsList = [...newState.postsList, ...action.payload];
   }
 
+  if (action.type === 'Home_Page_SetPostsList_CleanUp') {
+    newState.postsList = [];
+  }
+
   if (action.type === 'MyPosts_Components_SetPostsList') {
     newState.myPostsList = [...action.payload];
   }

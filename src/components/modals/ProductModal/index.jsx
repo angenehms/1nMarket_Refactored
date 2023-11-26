@@ -11,8 +11,9 @@ const ProductModal = ({
   setOpenModal,
 }) => {
   const [openAlert, setOpenAlert] = useState(false);
+  const accountname = JSON.parse(localStorage.getItem('accountname'));
 
-  return (
+  return accountname === product.author.accountname ? (
     <>
       <ModalLayout setOpenModal={setOpenModal}>
         <li onClick={() => setOpenAlert(true)}>삭제</li>
@@ -37,6 +38,12 @@ const ProductModal = ({
         />
       )}
     </>
+  ) : (
+    <ModalLayout setOpenModal={setOpenModal}>
+      <li>
+        <S.ProductLink href={`${link}`}>웹사이트에서 상품 보기</S.ProductLink>
+      </li>
+    </ModalLayout>
   );
 };
 

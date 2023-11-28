@@ -71,6 +71,7 @@ const PostForm = ({ content, setContent, imgFiles, setImgFiles }) => {
                     : img
                 }
                 alt=''
+                onError={setImgFiles([])}
               />
               <S.RemoveButton type='button' onClick={() => handleRemoveImg(i)}>
                 <span className='ir'>이미지 삭제</span>

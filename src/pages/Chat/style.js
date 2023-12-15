@@ -49,6 +49,12 @@ export const BasicProfileIcon = styled.img.attrs({
   height: 42px;
 `;
 
+export const ProfileIcon = styled.img`
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+`
+
 export const NewChatMark = styled.img.attrs({
   src: NewChat,
   alt: '새로운 메세지 표시',

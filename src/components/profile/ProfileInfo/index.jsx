@@ -6,18 +6,11 @@ import { ReactComponent as MessageIcon } from '../../../assets/icons/icon-messag
 import { ReactComponent as ShareIcon } from '../../../assets/icons/icon-share.svg';
 
 const ProfileInfo = () => {
-
   const { accountname } = useParams();
   const [profile, setProfile] = useState({});
-  const navigate = useNavigate();
-
-  const testGet = () => {
-    fetch('http://localhost:8080/chat', { 
-      method: 'GET' 
-    }).then(() => navigate(`/chat/${username}`));
-  };
 
   const {
+    _id,
     followerCount,
     followingCount,
     image = '',
@@ -25,6 +18,21 @@ const ProfileInfo = () => {
     isfollow,
     username,
   } = profile;
+
+  const navigate = useNavigate();
+  const loginId = JSON.parse(localStorage.getItem('id'));
+
+  const toChatRoom = () => {
+
+    fetch("http://localhost:8080/chat/request", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // JSON 형식으로 데이터 전송
+        },
+        body: JSON.stringify({loginId, _id, image, username})
+      },
+    ).then(() => navigate(`/chat/room?loginId=${loginId}&writerId=${_id}`)); // 아예 then 이 실행이 안되네?
+  };
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -98,7 +106,7 @@ const ProfileInfo = () => {
           </>
         ) : (
           <>
-            <S.IconButton onClick={testGet}>
+            <S.IconButton onClick={toChatRoom}>
               <MessageIcon
                 style={{
                   width: '22px',

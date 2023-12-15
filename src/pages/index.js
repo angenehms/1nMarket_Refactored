@@ -14,3 +14,5 @@ export { default as Public } from './Public';
 export { default as Search } from './Search';
 export { default as Signup } from './Signup';
 export { default as SignupProfile } from './SignupProfile';
+export { default as ChatRoom } from './ChatRoom';
+

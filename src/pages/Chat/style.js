@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import BasicProfile from '../../assets/icons/basic-profile.svg';
 import NewChat from '../../assets/icons/NewChat.svg';
+import { Link } from 'react-router-dom';
 
 export const Content = styled.main`
   padding: 72px 16px 0px;
@@ -22,6 +23,10 @@ export const ChatItem = styled.li`
   height: 42px;
   margin-bottom: 20px;
 `;
+
+export const ChatRoomLink = styled(Link)`
+  text-decoration-line: none;
+`
 
 export const IconContentWrapper = styled.div`
   display: flex;

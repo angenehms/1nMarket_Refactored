@@ -1,15 +1,17 @@
 import React from "react";
 import * as S from "./style"
 import { HeaderWrapper } from "../style";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ChatHeader = () => {
   const navigate = useNavigate();
+  const id = useParams();
+
   return (
     <HeaderWrapper>
       <S.FlexDiv>
         <S.LeftIcon onClick={() => navigate(-1)}/>
-        <S.ChatUserName>애월읍 위니브 감귤농장</S.ChatUserName>
+        <S.ChatUserName>{`${id.id}`}</S.ChatUserName>
         </S.FlexDiv>
         <S.RightIcon/>
     </HeaderWrapper>

@@ -15,6 +15,7 @@ import {
   PostModify,
   ProductModify,
   Missing,
+  ChatRoom,
 } from 'pages';
 import { Layout, Navbar, RequireAuth } from 'components';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -58,6 +59,8 @@ const Router = () => {
 
             <Route path='profile/:userId/edit' element={<ProfileModify />} />
             <Route path='product/:productId/edit' element={<ProductModify />} />
+
+            <Route path='chat/:id' element={<ChatRoom />} />
           </Route>
 
           <Route path='*' element={<Missing />} />

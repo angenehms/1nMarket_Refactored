@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { axiosPrivate } from 'apis/axios';
 import * as S from './style';
 import { ReactComponent as MessageIcon } from '../../../assets/icons/icon-message-circle.svg';
@@ -8,6 +8,12 @@ import { ReactComponent as ShareIcon } from '../../../assets/icons/icon-share.sv
 const ProfileInfo = () => {
   const { accountname } = useParams();
   const [profile, setProfile] = useState({});
+
+  const navigate = useNavigate();
+ 
+  const navigateToChatRoom = () => {
+    navigate(`/chat/${accountname}`);
+  };
 
   const {
     followerCount,
@@ -90,7 +96,7 @@ const ProfileInfo = () => {
           </>
         ) : (
           <>
-            <S.IconButton>
+            <S.IconButton onClick={navigateToChatRoom}>
               <MessageIcon
                 style={{
                   width: '22px',

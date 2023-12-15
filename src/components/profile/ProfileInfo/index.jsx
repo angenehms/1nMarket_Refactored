@@ -6,13 +6,15 @@ import { ReactComponent as MessageIcon } from '../../../assets/icons/icon-messag
 import { ReactComponent as ShareIcon } from '../../../assets/icons/icon-share.svg';
 
 const ProfileInfo = () => {
+
   const { accountname } = useParams();
   const [profile, setProfile] = useState({});
-
   const navigate = useNavigate();
- 
-  const navigateToChatRoom = () => {
-    navigate(`/chat/${accountname}`);
+
+  const testGet = () => {
+    fetch('http://localhost:8080/chat', { 
+      method: 'GET' 
+    }).then(() => navigate(`/chat/${username}`));
   };
 
   const {
@@ -96,7 +98,7 @@ const ProfileInfo = () => {
           </>
         ) : (
           <>
-            <S.IconButton onClick={navigateToChatRoom}>
+            <S.IconButton onClick={testGet}>
               <MessageIcon
                 style={{
                   width: '22px',

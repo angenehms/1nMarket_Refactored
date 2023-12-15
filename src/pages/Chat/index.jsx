@@ -4,6 +4,7 @@ import { useTitle } from 'hooks';
 import * as S from './style';
 
 const Chat = () => {
+
   const chatMembers = [
     {
       username: '공구하자',
@@ -48,7 +49,7 @@ const Chat = () => {
             </S.ChatRoomLink>
           ))}
 
-          <S.ChatRoomLink to={"/chat/철수네농장"}>
+          <S.ChatRoomLink to={'/chat/철수네농장'}>
             <S.ChatItem>
               <S.IconContentWrapper>
                 <S.BasicProfileIcon />

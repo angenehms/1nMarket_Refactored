@@ -34,6 +34,8 @@ const Login = () => {
     if (data?.status === 422) {
       return setErrMsg(data?.message);
     }
+    
+    localStorage.setItem("id", JSON.stringify(data?.user?._id))
     localStorage.setItem('token', JSON.stringify(data?.user?.token));
     localStorage.setItem('profile-img', JSON.stringify(data?.user?.image));
     localStorage.setItem(
@@ -43,6 +45,7 @@ const Login = () => {
     setEmail('');
     setPassword('');
     navigate(from, { replace: true });
+
   };
 
   useEffect(() => {

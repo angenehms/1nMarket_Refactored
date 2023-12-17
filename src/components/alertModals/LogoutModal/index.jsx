@@ -11,6 +11,7 @@ const LogoutModal = ({ setOpenModal, setOpenAlert }) => {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("id");
     localStorage.removeItem('token');
     localStorage.removeItem('accountname');
     localStorage.removeItem('profile-img');

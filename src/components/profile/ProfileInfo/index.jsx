@@ -22,16 +22,24 @@ const ProfileInfo = () => {
   const navigate = useNavigate();
   const loginId = JSON.parse(localStorage.getItem('id'));
 
-  const toChatRoom = () => {
+  const toChatRoom = async () => {
 
-    fetch("http://localhost:8080/chat/request", {
+    await fetch("http://localhost:8080/chat/request", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', // JSON 형식으로 데이터 전송
         },
         body: JSON.stringify({loginId, _id, image, username})
-      },
-    ).then(() => navigate(`/chat/room?loginId=${loginId}&writerId=${_id}`)); // 아예 then 이 실행이 안되네?
+      }, // 서버로 유저정보 보내서 서버에선 받은 정보를 이용해서 채팅방 다큐먼트 만들기, 후에 서버에선 채팅다큐먼트고유id 를 응답값으로 보내기
+    ).then((r) => r.json())
+    .then(data => navigate(`/chat/${data.insertedId}?with=${username}`))
+    // 위 post 요청에 대한 응답으로 받은 채팅다큐먼트고유id 를 가져와 url 파라미터에 담고 그곳으로 navigate
+    
+    // 그럼 chatroom 페이지에서는 마운트 시에 ajax 요청을 통해 get 요청을 보내면 
+    // 서버에서는 채팅방 고유 id로 쓰인 url 파라미터를 추출후 해당 다큐먼트를 디비에서 찾아 응답값으로 보낸다.
+    
+    // 그럼 그 응답값을 받은 클라이언트에서는 채팅데이터를 화면에 구현한다.
+    
   };
 
   useEffect(() => {

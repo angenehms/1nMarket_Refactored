@@ -32,7 +32,7 @@ const ProfileInfo = () => {
         body: JSON.stringify({loginId, _id, image, username})
       }, // 서버로 유저정보 보내서 서버에선 받은 정보를 이용해서 채팅방 다큐먼트 만들기, 후에 서버에선 채팅다큐먼트고유id 를 응답값으로 보내기
     ).then((r) => r.json())
-    .then(data => navigate(`/chat/${data.insertedId}?with=${username}`))
+    .then(data => navigate(`/chat/${data.insertedId}?writerId=${_id}&with=${username}`))
     // 위 post 요청에 대한 응답으로 받은 채팅다큐먼트고유id 를 가져와 url 파라미터에 담고 그곳으로 navigate
     
     // 그럼 chatroom 페이지에서는 마운트 시에 ajax 요청을 통해 get 요청을 보내면 

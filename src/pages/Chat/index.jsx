@@ -4,7 +4,6 @@ import { useTitle } from 'hooks';
 import * as S from './style';
 
 const Chat = () => {
-  
   const loginId = JSON.parse(localStorage.getItem('id'));
   const [chatList, setChatList] = useState([]);
 
@@ -30,19 +29,30 @@ const Chat = () => {
       <S.Content>
         <S.ChatList>
           {chatList.map((item, i) => (
-            <S.ChatRoomLink key={i} to={`/chat/${item._id}?with=${item.writerUsername}`}>
-            {/* /chat/${채팅다큐먼트고유id}?with=${글쓴사람username} 로 라우팅 */}
+            <S.ChatRoomLink
+              key={i}
+              to={`/chat/${item._id}?writerId=${item.member[1]}&with=${item.writerUsername}`}
+            >
+              {/* /chat/${채팅다큐먼트고유id}?with=${글쓴사람username} 로 라우팅 */}
               <S.ChatItem>
                 <S.IconContentWrapper>
                   <S.IconDiv>
-                    { item.writerProfileImg.includes('mandarin.api') ? <S.ProfileIcon src={
-                        item.writerProfileImg.includes('mandarin.api')
-                          ? item.writerProfileImg.replace('mandarin.api', 'api.mandarin')
-                          : item.writerProfileImg
-                      }
-                      alt='프로필 이미지'
-                    /> : <S.BasicProfileIcon />}
-                    
+                    {item.writerProfileImg.includes('mandarin.api') ? (
+                      <S.ProfileIcon
+                        src={
+                          item.writerProfileImg.includes('mandarin.api')
+                            ? item.writerProfileImg.replace(
+                                'mandarin.api',
+                                'api.mandarin',
+                              )
+                            : item.writerProfileImg
+                        }
+                        alt='프로필 이미지'
+                      />
+                    ) : (
+                      <S.BasicProfileIcon />
+                    )}
+
                     <S.NewChatMark />
                   </S.IconDiv>
 

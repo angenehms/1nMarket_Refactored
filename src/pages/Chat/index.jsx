@@ -66,23 +66,6 @@ const Chat = () => {
               </S.ChatItem>
             </S.ChatRoomLink>
           ))}
-
-          <S.ChatRoomLink to={'/chat/철수네농장'}>
-            <S.ChatItem>
-              <S.IconContentWrapper>
-                <S.BasicProfileIcon />
-
-                <S.ChatContentDiv>
-                  <S.ChatUserName>철수네농장</S.ChatUserName>
-                  <S.ChatContent>
-                    한 박스에 오천원씩 해서 나누는 게 어때요?
-                  </S.ChatContent>
-                </S.ChatContentDiv>
-              </S.IconContentWrapper>
-
-              <S.ChatDate>2020.10.25</S.ChatDate>
-            </S.ChatItem>
-          </S.ChatRoomLink>
         </S.ChatList>
       </S.Content>
     </>

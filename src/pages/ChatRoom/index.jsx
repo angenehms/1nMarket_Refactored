@@ -39,7 +39,7 @@ const ChatRoom = () => {
         
       if (isJoinable) {
         socket.on('serverMsg', (data) => {
-          console.log(data);
+          console.log("serverMsg:", data);
         });
 
         socket.emit('ask-join', `${id}`);

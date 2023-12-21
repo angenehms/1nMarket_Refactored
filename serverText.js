@@ -50,7 +50,16 @@
 // });
 
 // app.post("/chat/request", async (요청, 응답) => {
+//   const isExist = await db.collection("chat").findOne({
+//     member: [new ObjectId(요청.body.loginId), new ObjectId(요청.body._id)],
+//   });
 
+//   if (isExist) {
+//     // 채팅방이 이미 존재하면
+
+//     const existingChatRoomId = { insertedId: `${isExist._id}` };
+//     응답.json(existingChatRoomId);
+//   } else {
 //     // 채팅방이 존재하지 않으면
 
 //     const insertedChatRoom = await db.collection("chat").insertOne({
@@ -62,6 +71,7 @@
 //     });
 
 //     응답.json(insertedChatRoom);
+//   }
 
 //   // 이거 안쓰면 프론트 단에서 then 내부코드가 실행되지 않던데 ..!
 // });
@@ -108,7 +118,7 @@
 //   // 어떤 유저가 웹소켓에 연결할 때마다 아래 코드 실행
 
 //   socket.on("clientMsg", ({ msg, roomId }) => {
-//     console.log(msg, roomId);
+//     console.log("clientMsg:", msg, "roomId:", roomId);
 //     io.to(roomId).emit("serverMsg", msg);
 //   });
 

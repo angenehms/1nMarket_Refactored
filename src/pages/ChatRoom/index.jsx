@@ -11,6 +11,7 @@ const ChatRoom = () => {
   const socket = io('http://localhost:8080');
   const { id } = useParams(); // 채팅방 다큐먼트 고유아이디
   const loginId = JSON.parse(localStorage.getItem('id')); // 로그인된 id
+  const [chatState, setChatState] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -45,11 +46,11 @@ const ChatRoom = () => {
         },
       ).then((r) => r.json());
 
-      console.log("canjoin", mountData)
-
       if (mountData.canJoin) {
+        setChatState(mountData.chatData);
+
         socket.on('serverMsg', (data) => {
-          console.log('serverMsg:', data);
+          setChatState((prevArray) => [...prevArray, data]);
         });
 
         socket.emit('ask-join', `${id}`);
@@ -71,14 +72,19 @@ const ChatRoom = () => {
 
       <S.Content>
         <S.ChatContents>
-          <S.Someone>
-            <div>Someone</div>
-          </S.Someone>
-          <S.MyChat>MyChat</S.MyChat>
-          <S.Someone>
-            <div>Someone</div>
-          </S.Someone>
-          <S.MyChat>MyChat</S.MyChat>
+          {chatState.length
+            ? chatState.map((item) =>
+                item.from === loginId ? (
+                  <S.MyChat>
+                    <div>{item.msg}</div>
+                  </S.MyChat>
+                ) : (
+                  <S.Someone>
+                    <div>{item.msg}</div>
+                  </S.Someone>
+                ),
+              )
+            : null}
         </S.ChatContents>
       </S.Content>
 

@@ -18,6 +18,7 @@ export const Someone = styled.li`
 export const MyChat = styled.li`
     /* 위치지정 */
     display: flex;
+    justify-content: end;
 `
 
 export const FormWrapper = styled.form`

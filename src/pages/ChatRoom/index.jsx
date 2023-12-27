@@ -22,7 +22,13 @@ const ChatRoom = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // 서버로 메시지 전송
-    socket.emit('clientMsg', { msg: `${inputValue}`, roomId: `${id}` });
+    socket.emit('clientMsg', {
+      msg: `${inputValue}`,
+      roomId: `${id}`,
+      from: `${loginId}`,
+      to: `${writerId}`,
+      whenSend: `${new Date()}`,
+    });
     setInputValue('');
   };
 
@@ -32,14 +38,18 @@ const ChatRoom = () => {
 
   useEffect(() => {
     const protectChatRoomPrivacy = async () => {
+      const mountData = await fetch(
+        `http://localhost:8080/chat/${id}/${loginId}/${writerId}`,
+        {
+          method: 'GET',
+        },
+      ).then((r) => r.json());
 
-      const isJoinable = await fetch(`http://localhost:8080/chat/${id}/${loginId}/${writerId}`, {
-        method: 'GET',
-      }).then((r) => r.json())
-        
-      if (isJoinable) {
+      console.log("canjoin", mountData)
+
+      if (mountData.canJoin) {
         socket.on('serverMsg', (data) => {
-          console.log("serverMsg:", data);
+          console.log('serverMsg:', data);
         });
 
         socket.emit('ask-join', `${id}`);

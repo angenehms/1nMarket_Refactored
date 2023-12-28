@@ -33,7 +33,7 @@ const ChatRoom = () => {
       whenSend: `${new Date()}`,
     });
 
-    window.scrollTo(0, document.body.scrollHeight);
+    // window.scrollTo(0, document.body.scrollHeight);
     setInputValue('');
   };
 
@@ -108,6 +108,13 @@ const ChatRoom = () => {
       // check.current = false ;
     }
   }, [toggle])
+
+  useEffect(() => {
+    const lastChatingData = chatState[chatState.length-1];
+    if (toggle && lastChatingData.from === loginId) { // 가장 최근 채팅이 내가 보낸 채팅일 때
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+  }, [chatState])
 
   return (
     <>

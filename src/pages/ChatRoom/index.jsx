@@ -13,8 +13,10 @@ const ChatRoom = () => {
   const loginId = JSON.parse(localStorage.getItem('id')); // 로그인된 id
   const [chatState, setChatState] = useState([]);
   const [inputValue, setInputValue] = useState('');
+  const [toggle, setToggle] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  // const check = useRef(true);
 
   // 쿼리 파라미터 중 'with'의 값을 가져옴
   const writerId = searchParams.get('writerId');
@@ -30,6 +32,8 @@ const ChatRoom = () => {
       to: `${writerId}`,
       whenSend: `${new Date()}`,
     });
+
+    window.scrollTo(0, document.body.scrollHeight);
     setInputValue('');
   };
 
@@ -37,34 +41,73 @@ const ChatRoom = () => {
     setInputValue(e.target.value);
   };
 
+  // useEffect(() => {
+  //   if(check.current) {
+  //     window.scrollTo(0, document.body.scrollHeight);
+  //     // check.current = false
+  //   }
+  // }, [chatState])
+
+  // useEffect(() => {
+
+  //   const protectChatRoomPrivacy = async () => {
+  //     const mountData = await fetch(
+  //       `http://localhost:8080/chat/${id}/${loginId}/${writerId}`,
+  //       {
+  //         method: 'GET',
+  //       },
+  //     ).then((r) => r.json());
+
+  //     if (mountData.canJoin) {
+  //       setChatState(mountData.chatData);
+  //       socket.on('serverMsg', (data) => {
+  //         setChatState((prevArray) => [...prevArray, data]);
+  //       });
+  //       socket.emit('ask-join', `${id}`);
+  //     } else {
+  //       navigate('/Home');
+  //     }
+  //   };
+
+  //   protectChatRoomPrivacy();
+    
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
+
+  const getFirstData = async () => {
+    const mountData = await fetch(
+      `http://localhost:8080/chat/${id}/${loginId}/${writerId}`,
+      {
+        method: 'GET',
+      },
+    ).then((r) => r.json());
+    if (mountData.canJoin) { 
+      setChatState(mountData.chatData);
+      setToggle(true);
+    } else navigate('/Home'); 
+  }
+  
   useEffect(() => {
-    const protectChatRoomPrivacy = async () => {
-      const mountData = await fetch(
-        `http://localhost:8080/chat/${id}/${loginId}/${writerId}`,
-        {
-          method: 'GET',
-        },
-      ).then((r) => r.json());
-
-      if (mountData.canJoin) {
-        setChatState(mountData.chatData);
-
-        socket.on('serverMsg', (data) => {
-          setChatState((prevArray) => [...prevArray, data]);
-        });
-
-        socket.emit('ask-join', `${id}`);
-      } else {
-        navigate('/Home');
-      }
-    };
-
-    protectChatRoomPrivacy();
-
+    socket.on('serverMsg', (data) => {
+      setChatState((prevArray) => [...prevArray, data]);
+    });
+    socket.emit('ask-join', `${id}`);
+    getFirstData()
+    
     return () => {
       socket.disconnect();
     };
   }, []);
+  
+  useEffect(() => {
+    // if (chatState.length > 0 && check.current) { // 최적화이전코드
+    if (toggle) {
+      window.scrollTo(0, document.body.scrollHeight);
+      // check.current = false ;
+    }
+  }, [toggle])
 
   return (
     <>
@@ -99,3 +142,4 @@ const ChatRoom = () => {
 };
 
 export default ChatRoom;
+

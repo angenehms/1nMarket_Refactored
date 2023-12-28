@@ -1,14 +1,22 @@
 import styled from 'styled-components';
 
 export const Content = styled.main`
-  padding: 72px 16px 0px;
+  padding: 72px 16px 72px;
 `;
 
 export const ChatContents = styled.ul`
   max-width: 390px;
-  height: 100vh;
   margin: 0 auto;
 `
+
+// export const PostWrapper = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   max-width: 390px;
+//   margin: 0 auto;
+//   padding: 20px 16px 16px;
+// `;
 
 export const Someone = styled.li`
     /* 위치지정 */
@@ -18,7 +26,6 @@ export const Someone = styled.li`
 export const MyChat = styled.li`
     /* 위치지정 */
     display: flex;
-    justify-content: end;
 `
 
 export const FormWrapper = styled.form`

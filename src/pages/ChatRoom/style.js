@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Content = styled.main`
-  padding: 72px 16px 72px;
+  padding: 56px 16px 72px;
 `;
 
 export const ChatContents = styled.ul`
@@ -17,6 +17,7 @@ export const Someone = styled.li`
 export const MyChat = styled.li`
     /* 위치지정 */
     display: flex;
+    justify-content: end;
 `
 
 export const FormWrapper = styled.form`

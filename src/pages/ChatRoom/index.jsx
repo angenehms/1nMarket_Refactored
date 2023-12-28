@@ -110,8 +110,9 @@ const ChatRoom = () => {
   }, [toggle])
 
   useEffect(() => {
-    const lastChatingData = chatState[chatState.length-1];
+    const lastChatingData = chatState[chatState.length-1]; // pop() 으로 하면 버그발생 - 원본배열수정이슈로 인한 ..
     if (toggle && lastChatingData.from === loginId) { // 가장 최근 채팅이 내가 보낸 채팅일 때
+      // 토글이 참이어야하는 이유는 마운트 이후여야 chatState 에 데이터가 쌓여 있어서 배열에 접근할 수 있음
       window.scrollTo(0, document.body.scrollHeight);
     }
   }, [chatState])

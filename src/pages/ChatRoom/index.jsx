@@ -21,6 +21,9 @@ const ChatRoom = () => {
   // 쿼리 파라미터 중 'with'의 값을 가져옴
   const writerId = searchParams.get('writerId');
   const writerUsername = searchParams.get('with');
+  const writerProfileImg = searchParams.get('writerImg');
+
+  const loginIdProfileImg = JSON.parse(localStorage.getItem('profile-img'));
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -70,7 +73,7 @@ const ChatRoom = () => {
   //   };
 
   //   protectChatRoomPrivacy();
-    
+
   //   return () => {
   //     socket.disconnect();
   //   };
@@ -83,39 +86,40 @@ const ChatRoom = () => {
         method: 'GET',
       },
     ).then((r) => r.json());
-    if (mountData.canJoin) { 
+    if (mountData.canJoin) {
       setChatState(mountData.chatData);
       setToggle(true);
-    } else navigate('/Home'); 
-  }
-  
+    } else navigate('/Home');
+  };
+
   useEffect(() => {
     socket.on('serverMsg', (data) => {
       setChatState((prevArray) => [...prevArray, data]);
     });
     socket.emit('ask-join', `${id}`);
-    getFirstData()
-    
+    getFirstData();
+
     return () => {
       socket.disconnect();
     };
   }, []);
-  
+
   useEffect(() => {
     // if (chatState.length > 0 && check.current) { // 최적화이전코드
     if (toggle) {
       window.scrollTo(0, document.body.scrollHeight);
       // check.current = false ;
     }
-  }, [toggle])
+  }, [toggle]);
 
   useEffect(() => {
-    const lastChatingData = chatState[chatState.length-1]; // pop() 으로 하면 버그발생 - 원본배열수정이슈로 인한 ..
-    if (toggle && lastChatingData.from === loginId) { // 가장 최근 채팅이 내가 보낸 채팅일 때
+    const lastChatingData = chatState[chatState.length - 1]; // pop() 으로 하면 버그발생 - 원본배열수정이슈로 인한 ..
+    if (toggle && lastChatingData.from === loginId) {
+      // 가장 최근 채팅이 내가 보낸 채팅일 때
       // 토글이 참이어야하는 이유는 마운트 이후여야 chatState 에 데이터가 쌓여 있어서 배열에 접근할 수 있음
       window.scrollTo(0, document.body.scrollHeight);
     }
-  }, [chatState])
+  }, [chatState]);
 
   return (
     <>
@@ -124,15 +128,37 @@ const ChatRoom = () => {
       <S.Content>
         <S.ChatContents>
           {chatState.length
-            ? chatState.map((item) =>
+            ? chatState.map((item, i) =>
                 item.from === loginId ? (
-                  <S.MyChat>
-                    <div>{item.msg}</div>
+                  <S.MyChat key={i}>
+                    <S.ProfileImg
+                      src={
+                        loginIdProfileImg.includes('mandarin.api')
+                          ? loginIdProfileImg.replace(
+                              'mandarin.api',
+                              'api.mandarin',
+                            )
+                          : loginIdProfileImg
+                      }
+                      alt='프로필 이미지'
+                    />
+                    <S.MyTextBox>{item.msg}</S.MyTextBox>
                   </S.MyChat>
                 ) : (
-                  <S.Someone>
-                    <div>{item.msg}</div>
-                  </S.Someone>
+                  <S.SomeoneChat key={i}>
+                    <S.ProfileImg
+                      src={
+                        writerProfileImg.includes('mandarin.api')
+                          ? writerProfileImg.replace(
+                              'mandarin.api',
+                              'api.mandarin',
+                            )
+                          : writerProfileImg
+                      }
+                      alt='프로필 이미지'
+                    />
+                    <S.SomeoneTextBox>{item.msg}</S.SomeoneTextBox>
+                  </S.SomeoneChat>
                 ),
               )
             : null}
@@ -150,4 +176,3 @@ const ChatRoom = () => {
 };
 
 export default ChatRoom;
-

@@ -31,7 +31,7 @@ const Chat = () => {
           {chatList.map((item, i) => (
             <S.ChatRoomLink
               key={i}
-              to={`/chat/${item._id}?writerId=${item.member[1]}&with=${item.writerUsername}`}
+              to={`/chat/${item._id}?writerId=${item.member[1]}&with=${item.writerUsername}&writerImg=${item.writerProfileImg}`}
             >
               {/* /chat/${채팅다큐먼트고유id}?with=${글쓴사람username} 로 라우팅 */}
               <S.ChatItem>

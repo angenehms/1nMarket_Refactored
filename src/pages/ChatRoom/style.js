@@ -7,18 +7,43 @@ export const Content = styled.main`
 export const ChatContents = styled.ul`
   max-width: 390px;
   margin: 0 auto;
-`
-
-export const Someone = styled.li`
-    /* 위치지정 */
-    display: flex;
-`
+`;
 
 export const MyChat = styled.li`
-    /* 위치지정 */
-    display: flex;
-    justify-content: end;
-`
+  /* 위치지정 */
+  display: flex;
+  justify-content: end;
+  flex-direction: row-reverse;
+`;
+
+export const SomeoneChat = styled.li`
+  /* 위치지정 */
+  display: flex;
+`;
+
+export const ProfileImg = styled.img`
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+`;
+
+export const MyTextBox = styled.div`
+  max-width: 200px;
+  padding: 10px;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  border-radius: 15px;
+  background-color: yellow;
+`;
+
+export const SomeoneTextBox = styled.div`
+  max-width: 200px;
+  padding: 10px;
+  margin-left: 20px;
+  margin-bottom: 10px;
+  border-radius: 15px;
+  background-color: skyblue;
+`;
 
 export const FormWrapper = styled.form`
   min-width: 390px;

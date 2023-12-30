@@ -27,6 +27,10 @@ const ChatRoom = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (inputValue.trim() === '') return 
+    // 띄어쓰기 공백으로만 이루어진 경우 서버로 제출 안되게 설정
+
     // 서버로 메시지 전송
     socket.emit('clientMsg', {
       msg: `${inputValue}`,

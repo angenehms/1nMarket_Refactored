@@ -7,7 +7,19 @@ import { ReactComponent as ShareIcon } from '../../../assets/icons/icon-share.sv
 
 const ProfileInfo = () => {
   const { accountname } = useParams();
+  const loginIdAccountname = JSON.parse(localStorage.getItem("accountname"))
+  const [loginIdUsername, setLoginIdUsername] = useState("") 
   const [profile, setProfile] = useState({});
+
+  useEffect(() => {
+    const getLoginIdUsername = async () => {
+      const {
+        data: { profile },
+      } = await axiosPrivate.get(`/profile/${loginIdAccountname}`);
+      setLoginIdUsername(profile.username);
+    };
+    getLoginIdUsername();
+  }, [])
 
   const {
     _id,
@@ -21,6 +33,7 @@ const ProfileInfo = () => {
 
   const navigate = useNavigate();
   const loginId = JSON.parse(localStorage.getItem('id'));
+  const loginIdProfileImg = JSON.parse(localStorage.getItem('profile-img'))
 
   const toChatRoom = async () => {
 
@@ -29,10 +42,10 @@ const ProfileInfo = () => {
         headers: {
           'Content-Type': 'application/json', // JSON 형식으로 데이터 전송
         },
-        body: JSON.stringify({loginId, _id, image, username})
+        body: JSON.stringify({loginId, _id, loginIdProfileImg, image, loginIdUsername, username})
       }, // 서버로 유저정보 보내서 서버에선 받은 정보를 이용해서 채팅방 다큐먼트 만들기, 후에 서버에선 채팅다큐먼트고유id 를 응답값으로 보내기
     ).then((r) => r.json())
-    .then(data => navigate(`/chat/${data.insertedId}?writerId=${_id}&with=${username}`))
+    .then(data => navigate(`/chat/${data.insertedId}?writerId=${_id}&with=${username}&writerImg=${image}`))
     // 위 post 요청에 대한 응답으로 받은 채팅다큐먼트고유id 를 가져와 url 파라미터에 담고 그곳으로 navigate
     
     // 그럼 chatroom 페이지에서는 마운트 시에 ajax 요청을 통해 get 요청을 보내면 

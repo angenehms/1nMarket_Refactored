@@ -2,10 +2,33 @@ import React, { useEffect, useState } from 'react';
 import { ProfileHeader } from 'components';
 import { useTitle } from 'hooks';
 import * as S from './style';
+import { axiosPrivate } from 'apis/axios';
 
 const Chat = () => {
   const loginId = JSON.parse(localStorage.getItem('id'));
+  const loginIdAccountname = JSON.parse(localStorage.getItem("accountname"));
+  const [loginIdUsername, setLoginIdUsername] = useState("");
+  const loginIdProfileImg = JSON.parse(localStorage.getItem("profile-img"));
   const [chatList, setChatList] = useState([]);
+
+  useEffect(() => {
+    const getLoginIdUsername = async () => {
+      const {
+        data: { profile },
+      } = await axiosPrivate.get(`/profile/${loginIdAccountname}`);
+      setLoginIdUsername(profile.username);
+    };
+    getLoginIdUsername();
+  }, [])
+
+  // const getUserInfo = async () => {
+  //   const {
+  //     data: { profile },
+  //   } = await axiosPrivate.get(`/profile/${loginIdAccountname}`);
+  //   console.log(profile.username)
+  // };
+
+  // getUserInfo();
 
   useEffect(() => {
     const getChatList = async () => {
@@ -31,21 +54,21 @@ const Chat = () => {
           {chatList.map((item, i) => (
             <S.ChatRoomLink
               key={i}
-              to={`/chat/${item._id}?writerId=${item.member[1]}&with=${item.writerUsername}&writerImg=${item.writerProfileImg}`}
+              to={`/chat/${item._id}?writerId=${item.member[1]}&with=${item.memberUsernames.filter(i => i !== loginIdUsername)}&writerImg=${item.memberProfileImages.filter(i => i !== loginIdProfileImg)}`}
             >
               {/* /chat/${채팅다큐먼트고유id}?with=${글쓴사람username} 로 라우팅 */}
               <S.ChatItem>
                 <S.IconContentWrapper>
                   <S.IconDiv>
-                    {item.writerProfileImg.includes('mandarin.api') ? (
+                    {item.memberProfileImages.filter(i => i !== loginIdProfileImg)[0].includes('mandarin') ? (
                       <S.ProfileIcon
                         src={
-                          item.writerProfileImg.includes('mandarin.api')
-                            ? item.writerProfileImg.replace(
+                          item.memberProfileImages.filter(i => i !== loginIdProfileImg)[0].includes('mandarin.api')
+                            ? item.memberProfileImages.filter(i => i !== loginIdProfileImg)[0].replace(
                                 'mandarin.api',
                                 'api.mandarin',
                               )
-                            : item.writerProfileImg
+                            : item.memberProfileImages.filter(i => i !== loginIdProfileImg)[0]
                         }
                         alt='프로필 이미지'
                       />
@@ -57,7 +80,7 @@ const Chat = () => {
                   </S.IconDiv>
 
                   <S.ChatContentDiv>
-                    <S.ChatUserName>{item.writerUsername}</S.ChatUserName>
+                    <S.ChatUserName>{item.memberUsernames.filter(i => i !== loginIdUsername)}</S.ChatUserName>
                     <S.ChatContent>최근 메세지 내용</S.ChatContent>
                   </S.ChatContentDiv>
                 </S.IconContentWrapper>

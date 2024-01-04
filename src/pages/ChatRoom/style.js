@@ -28,6 +28,8 @@ export const ProfileImg = styled.img`
 `;
 
 export const MyTextBox = styled.div`
+  word-break: break-all;
+
   max-width: 200px;
   padding: 10px;
   margin-right: 20px;
@@ -37,12 +39,60 @@ export const MyTextBox = styled.div`
 `;
 
 export const SomeoneTextBox = styled.div`
+  word-break: break-all;
   max-width: 200px;
   padding: 10px;
   margin-left: 20px;
   margin-bottom: 10px;
   border-radius: 15px;
   background-color: skyblue;
+`;
+
+export const ToRecentChat = styled.button`
+  position: fixed;
+  z-index: 999;
+  bottom: 70px;
+  left: 50%;
+  width: 350px;
+  height: 36px;
+  margin-left: -175px; /* 너비의 절반만큼 왼쪽으로 이동 */
+  margin-top: -18px; /* 높이의 절반만큼 위로 이동 */
+  border-radius: 15px;
+  border: none; /* 테두리 없애기 */
+  background-color: rgba(76, 153, 0, 0.9);
+  display: flex;
+  gap: 5px;
+  align-items: center; /* 자식 요소들을 세로로 중앙 정렬 */
+  padding-left: 10px;
+`;
+
+export const RecentChatProfileImg = styled.img`
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+`;
+
+export const RecentChatUsername = styled.div`
+  color: rgb(51, 102, 0);
+`
+
+export const RecentChatContents = styled.div`
+  margin-left: 5px;
+  margin-right: 5px;
+  color: rgb(220, 255, 204);
+  width: 100%;
+  text-align: left;
+  white-space: nowrap;       /* 줄 바꿈 방지 */
+  overflow: hidden;          /* 넘치는 내용 숨김 */
+  text-overflow: ellipsis;   /* 생략 부호 (...) 표시 */
+  max-width: 100%;           /* 최대 너비 설정 */
+`;
+
+export const ToRecentChatArrow = styled.img`
+  width: 15px;
+  height: 17px;
+  margin-left: auto;
+  margin-right: 15px;
 `;
 
 export const FormWrapper = styled.form`

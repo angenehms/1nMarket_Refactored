@@ -3,14 +3,14 @@ import * as S from "./style"
 import { HeaderWrapper } from "../style";
 import { useNavigate } from "react-router-dom";
 
-const ChatHeader = ({writerUsername}) => {
+const ChatHeader = ({withUsername}) => {
   const navigate = useNavigate();
 
   return (
     <HeaderWrapper>
       <S.FlexDiv>
         <S.LeftIcon onClick={() => navigate(-1)}/>
-        <S.ChatUserName>{`${writerUsername}`}</S.ChatUserName>
+        <S.ChatUserName>{`${withUsername}`}</S.ChatUserName>
         </S.FlexDiv>
         <S.RightIcon/>
     </HeaderWrapper>

@@ -1,5 +1,5 @@
 import { ChatHeader } from 'components';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import * as S from './style';
 import { ReactComponent as ChatIcon } from './../../assets/icons/icon-message-circle.svg';
@@ -16,12 +16,14 @@ const ChatRoom = () => {
   const [toggle, setToggle] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const isScrollBottom = useRef(true)
+  const observerTargetEl = useRef(null)
   // const check = useRef(true);
 
-  // 쿼리 파라미터 중 'with'의 값을 가져옴
-  const writerId = searchParams.get('writerId');
-  const writerUsername = searchParams.get('with');
-  const writerProfileImg = searchParams.get('writerImg');
+  // 쿼리 파라미터의 값을 가져옴
+  const withId = searchParams.get('withId');
+  const withUsername = searchParams.get('withUsername');
+  const withProfileImg = searchParams.get('writerImg');
 
   const loginIdProfileImg = JSON.parse(localStorage.getItem('profile-img'));
 
@@ -36,7 +38,7 @@ const ChatRoom = () => {
       msg: `${inputValue}`,
       roomId: `${id}`,
       from: `${loginId}`,
-      to: `${writerId}`,
+      to: `${withId}`,
       whenSend: `${new Date()}`,
     });
 
@@ -59,7 +61,7 @@ const ChatRoom = () => {
 
   //   const protectChatRoomPrivacy = async () => {
   //     const mountData = await fetch(
-  //       `http://localhost:8080/chat/${id}/${loginId}/${writerId}`,
+  //       `http://localhost:8080/chat/${id}/${loginId}/${withId}`,
   //       {
   //         method: 'GET',
   //       },
@@ -85,18 +87,21 @@ const ChatRoom = () => {
 
   const getFirstData = async () => {
     const mountData = await fetch(
-      `http://localhost:8080/chat/${id}/${loginId}/${writerId}`,
+      `http://localhost:8080/chat/${id}`,
       {
         method: 'GET',
       },
     ).then((r) => r.json());
+
+    console.log(mountData)
+
     if (mountData.canJoin) {
       setChatState(mountData.chatData);
       setToggle(true);
     } else navigate('/Home');
   };
 
-  useEffect(() => {
+  useEffect(() => { // 마운트 될 때 코드
     socket.on('serverMsg', (data) => {
       setChatState((prevArray) => [...prevArray, data]);
     });
@@ -108,16 +113,40 @@ const ChatRoom = () => {
     };
   }, []);
 
-  useEffect(() => {
+  useEffect(() => { // 순서상 마운트가 된 이후에 실행되어야하는 코드
     // if (chatState.length > 0 && check.current) { // 최적화이전코드
+
     if (toggle) {
       window.scrollTo(0, document.body.scrollHeight);
       // check.current = false ;
     }
+    
   }, [toggle]);
 
   useEffect(() => {
     const lastChatingData = chatState[chatState.length - 1]; // pop() 으로 하면 버그발생 - 원본배열수정이슈로 인한 ..
+
+    const io = new IntersectionObserver((entries) => {
+        // if ( isScrollBottom.current ) {
+        //   console.log("떼어짐 false")
+        //   isScrollBottom.current = false
+        // }
+
+        if (entries[0].isIntersecting) {
+          console.log("붙는 조건식")
+          isScrollBottom.current = true
+          console.log("isScrollBottom", isScrollBottom.current)
+        } else {
+          console.log("떼어지는 조건식")
+          isScrollBottom.current = false
+          console.log("isScrollBottom", isScrollBottom.current)
+        }
+
+        // if ( isScrollBottom.current )
+        // window.scrollTo(0, document.body.scrollHeight);
+    });
+
+    io.observe(observerTargetEl.current);
 
     // if (toggle && (lastChatingData.from === loginId)) { // 이렇게 쓰면 아예 최초로 채팅방이 만들어질 때에는 데이터가 없으므로 from 접근이 안됨
     //   // 가장 최근 채팅이 내가 보낸 채팅일 때
@@ -126,16 +155,47 @@ const ChatRoom = () => {
     // }
 
     if (lastChatingData !== undefined) {
-      if (lastChatingData.from === loginId) {
+
+      if (lastChatingData.from === loginId) { // 최근 채팅을 내가 보낼 때
         window.scrollTo(0, document.body.scrollHeight);
       }
+
+      if ( lastChatingData.from === withId ) {
+
+        if (isScrollBottom.current) { // 채팅창 스크롤이 가장 하단에 있는데 상대에게 메세지가 온경우 -> 반대로 스크롤이 위에있을 경우엔 상대메세지가 와도 스크롤 다운이 일어나지 않음
+          window.scrollTo(0, document.body.scrollHeight);
+        }
+
+      }
+
+      // console.log(withId, lastChatingData.from)
+      // console.log(lastChatingData.from)
+      // console.log(lastChatingData.from === withId)
+
+      // if ( lastChatingData.from === withId ) { // 최근 채팅이 상대가 보낸 채팅일 때
+
+      //   console.log("df", document.documentElement.scrollTop)
+      //   console.log("fg", document.documentElement.scrollHeight)
+      //   console.log("presentViewPosition", presentViewPosition)
+      //   console.log(document.documentElement.scrollHeight - document.documentElement.scrollTop)
+      //   console.log(document.documentElement.scrollHeight-window.scrollY)
+
+      //   if ( window.scrollY + window.innerHeight >= document.body.scrollHeight - 20  ) { // 스크롤이 맨 하단부에 있다면
+      //     window.scrollTo(0, document.body.scrollHeight);
+      //   }
+      // }
+
     }
+    
+    return () => {
+      io.disconnect();
+    };
 
   }, [chatState]);
 
   return (
     <>
-      <ChatHeader writerUsername={writerUsername} />
+      <ChatHeader withUsername={withUsername} />
 
       <S.Content>
         <S.ChatContents>
@@ -160,12 +220,12 @@ const ChatRoom = () => {
                   <S.SomeoneChat key={i}>
                     <S.ProfileImg
                       src={
-                        writerProfileImg.includes('mandarin.api')
-                          ? writerProfileImg.replace(
+                        withProfileImg.includes('mandarin.api')
+                          ? withProfileImg.replace(
                               'mandarin.api',
                               'api.mandarin',
                             )
-                          : writerProfileImg
+                          : withProfileImg
                       }
                       alt='프로필 이미지'
                     />
@@ -176,6 +236,8 @@ const ChatRoom = () => {
             : null}
         </S.ChatContents>
       </S.Content>
+
+      <div ref={observerTargetEl}></div>
 
       <S.FormWrapper onSubmit={handleSubmit}>
         <S.ChatInput type='text' onChange={onChangeValue} value={inputValue} />

@@ -39,6 +39,8 @@ const Chat = () => {
         },
       ).then((r) => r.json());
 
+      console.log("asdfasfadsfasf", data)
+
       setChatList(data);
     };
 
@@ -54,7 +56,7 @@ const Chat = () => {
           {chatList.map((item, i) => (
             <S.ChatRoomLink
               key={i}
-              to={`/chat/${item._id}?writerId=${item.member[1]}&with=${item.memberUsernames.filter(i => i !== loginIdUsername)}&writerImg=${item.memberProfileImages.filter(i => i !== loginIdProfileImg)}`}
+              to={`/chat/${item._id}?withId=${item.member.filter(i => i !== loginId)}&withUsername=${item.memberUsernames.filter(i => i !== loginIdUsername)}&writerImg=${item.memberProfileImages.filter(i => i !== loginIdProfileImg)}`}
             >
               {/* /chat/${채팅다큐먼트고유id}?with=${글쓴사람username} 로 라우팅 */}
               <S.ChatItem>

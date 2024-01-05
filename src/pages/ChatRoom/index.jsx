@@ -267,9 +267,15 @@ const ChatRoom = () => {
         </S.ToRecentChat>
       ) : null}
 
-      <S.ScrollDownBtn onClick={toNewChat}>
-        <S.ScrollDownImg img src={DownArrowIcon} alt="채팅창 스크롤 다운 아이콘"/>
-      </S.ScrollDownBtn>
+      {!isScrollBottom.current && !monitorReceiving ? (
+        <S.ScrollDownBtn onClick={toNewChat}>
+          <S.ScrollDownImg
+            img
+            src={DownArrowIcon}
+            alt='채팅창 스크롤 다운 아이콘'
+          />
+        </S.ScrollDownBtn>
+      ) : null}
 
       <div ref={observerTargetEl}></div>
 

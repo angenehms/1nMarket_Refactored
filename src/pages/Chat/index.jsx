@@ -10,6 +10,9 @@ const Chat = () => {
   const [loginIdUsername, setLoginIdUsername] = useState("");
   const loginIdProfileImg = JSON.parse(localStorage.getItem("profile-img"));
   const [chatList, setChatList] = useState([]);
+  console.log("ㅋㅋ", chatList);
+  console.log("ㅋ_ㅋ", chatList[0]);
+
 
   useEffect(() => {
     const getLoginIdUsername = async () => {
@@ -83,7 +86,7 @@ const Chat = () => {
 
                   <S.ChatContentDiv>
                     <S.ChatUserName>{item.memberUsernames.filter(i => i !== loginIdUsername)}</S.ChatUserName>
-                    <S.ChatContent>최근 메세지 내용</S.ChatContent>
+                    <S.ChatContent>{item.chatData[item.chatData.length - 1]?.msg}</S.ChatContent>
                   </S.ChatContentDiv>
                 </S.IconContentWrapper>
 

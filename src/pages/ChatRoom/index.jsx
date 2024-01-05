@@ -267,6 +267,10 @@ const ChatRoom = () => {
         </S.ToRecentChat>
       ) : null}
 
+      <S.ScrollDownBtn onClick={toNewChat}>
+        <S.ScrollDownImg img src={DownArrowIcon} alt="채팅창 스크롤 다운 아이콘"/>
+      </S.ScrollDownBtn>
+
       <div ref={observerTargetEl}></div>
 
       <S.FormWrapper onSubmit={handleSubmit}>

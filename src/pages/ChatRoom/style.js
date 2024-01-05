@@ -95,6 +95,30 @@ export const ToRecentChatArrow = styled.img`
   margin-right: 15px;
 `;
 
+export const ScrollDownBtn = styled.button`
+  position: fixed;
+  display: block;
+  z-index: 999;
+  bottom: 80px;
+  left: 50%;
+  width: 50px;
+  height: 50px;
+  margin-left: 145px; /* 너비의 절반만큼 왼쪽으로 이동 */
+  margin-top: -25px; /* 높이의 절반만큼 위로 이동 */
+  border-radius: 50%;
+  border: none;
+  background-color: pink;
+  opacity: 0.9;
+`
+
+export const ScrollDownImg = styled.img`
+  width: 50%;
+  height: 50%;
+  display: block;
+  margin: 0 auto;
+  margin-top: 7px;
+`
+
 export const FormWrapper = styled.form`
   min-width: 390px;
   width: 100%;

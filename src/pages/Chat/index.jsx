@@ -10,9 +10,6 @@ const Chat = () => {
   const [loginIdUsername, setLoginIdUsername] = useState("");
   const loginIdProfileImg = JSON.parse(localStorage.getItem("profile-img"));
   const [chatList, setChatList] = useState([]);
-  console.log("ㅋㅋ", chatList);
-  console.log("ㅋ_ㅋ", chatList[0]);
-
 
   useEffect(() => {
     const getLoginIdUsername = async () => {
@@ -42,7 +39,7 @@ const Chat = () => {
         },
       ).then((r) => r.json());
 
-      console.log("asdfasfadsfasf", data)
+      // console.log("data", data)
 
       setChatList(data);
     };

@@ -17,11 +17,12 @@ const ChatRoom = () => {
   const [toggle, setToggle] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const isScrollBottom = useRef(true);
-  const [forScrollRefRender, setScrollRefRender] = useState(null);
+  // const isScrollBottom = useRef(true);
+  // const [forScrollRefRender, setForScrollRefRender] = useState(null);
   const [monitorReceiving, setMonitorReceiving] = useState(false);
   const observerTargetEl = useRef(null);
   // const check = useRef(true);
+  const [isScrollBottom, setIsScrollBottom] = useState(true);
 
   // 쿼리 파라미터의 값을 가져옴
   const withId = searchParams.get('withId');
@@ -44,7 +45,6 @@ const ChatRoom = () => {
       whenSend: `${new Date()}`,
     });
 
-    // window.scrollTo(0, document.body.scrollHeight);
     setInputValue('');
   };
 
@@ -52,47 +52,12 @@ const ChatRoom = () => {
     setInputValue(e.target.value);
   };
 
-  // useEffect(() => {
-  //   if(check.current) {
-  //     window.scrollTo(0, document.body.scrollHeight);
-  //     // check.current = false
-  //   }
-  // }, [chatState])
-
-  // useEffect(() => {
-
-  //   const protectChatRoomPrivacy = async () => {
-  //     const mountData = await fetch(
-  //       `http://localhost:8080/chat/${id}/${loginId}/${withId}`,
-  //       {
-  //         method: 'GET',
-  //       },
-  //     ).then((r) => r.json());
-
-  //     if (mountData.canJoin) {
-  //       setChatState(mountData.chatData);
-  //       socket.on('serverMsg', (data) => {
-  //         setChatState((prevArray) => [...prevArray, data]);
-  //       });
-  //       socket.emit('ask-join', `${id}`);
-  //     } else {
-  //       navigate('/Home');
-  //     }
-  //   };
-
-  //   protectChatRoomPrivacy();
-
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, []);
-
   const getFirstData = async () => {
     const mountData = await fetch(`http://localhost:8080/chat/${id}`, {
       method: 'GET',
     }).then((r) => r.json());
 
-    console.log(mountData);
+    // console.log(mountData);
 
     if (mountData.canJoin) {
       setChatState(mountData.chatData);
@@ -113,8 +78,31 @@ const ChatRoom = () => {
     socket.emit('ask-join', `${id}`);
     getFirstData();
 
+    const io = new IntersectionObserver((entries) => {
+
+      if (entries[0].isIntersecting) {
+        // console.log('붙는 조건식');
+        // isScrollBottom.current = true;
+        // setForScrollRefRender(isScrollBottom.current);
+        setIsScrollBottom(true);
+        setMonitorReceiving(false);
+        // console.log('isScrollBottom', isScrollBottom.current);
+      } else {
+        // console.log('떼어지는 조건식');
+        // isScrollBottom.current = false;
+        // setForScrollRefRender(isScrollBottom.current);
+        setIsScrollBottom(false);
+        // console.log('isScrollBottom', isScrollBottom.current);
+        // console.log(forScrollRefRender);
+      }
+      
+    });
+
+    io.observe(observerTargetEl.current);
+
     return () => {
       socket.disconnect();
+      io.disconnect();
     };
   }, []);
 
@@ -131,74 +119,29 @@ const ChatRoom = () => {
   useEffect(() => {
     const lastChatingData = chatState[chatState.length - 1]; // pop() 으로 하면 버그발생 - 원본배열수정이슈로 인한 ..
 
-    const io = new IntersectionObserver((entries) => {
-      // if ( isScrollBottom.current ) {
-      //   console.log("떼어짐 false")
-      //   isScrollBottom.current = false
-      // }
-
-      if (entries[0].isIntersecting) {
-        console.log('붙는 조건식');
-        isScrollBottom.current = true;
-        setScrollRefRender(isScrollBottom.current);
-        setMonitorReceiving(false);
-        console.log('isScrollBottom', isScrollBottom.current);
-      } else {
-        console.log('떼어지는 조건식');
-        isScrollBottom.current = false;
-        setScrollRefRender(isScrollBottom.current);
-        console.log('isScrollBottom', isScrollBottom.current);
-        console.log(forScrollRefRender);
-      }
-
-      // if ( isScrollBottom.current )
-      // window.scrollTo(0, document.body.scrollHeight);
-    });
-
-    io.observe(observerTargetEl.current);
-
-    // if (toggle && (lastChatingData.from === loginId)) { // 이렇게 쓰면 아예 최초로 채팅방이 만들어질 때에는 데이터가 없으므로 from 접근이 안됨
-    //   // 가장 최근 채팅이 내가 보낸 채팅일 때
-    //   // 토글이 참이어야하는 이유는 마운트 이후여야 chatState 에 데이터가 쌓여 있어서 배열에 접근할 수 있음
-    //   window.scrollTo(0, document.body.scrollHeight);
-    // }
+    
 
     if (lastChatingData !== undefined) {
+
       if (lastChatingData.from === loginId) {
         // 최근 채팅을 내가 보낼 때
-        console.log(lastChatingData);
+        // console.log(lastChatingData);
         window.scrollTo(0, document.body.scrollHeight);
       }
 
       if (lastChatingData.from === withId) {
-        if (isScrollBottom.current) {
+        if (isScrollBottom) {
           // 채팅창 스크롤이 가장 하단에 있는데 상대에게 메세지가 온경우 -> 반대로 스크롤이 위에있을 경우엔 상대메세지가 와도 스크롤 다운이 일어나지 않음
           window.scrollTo(0, document.body.scrollHeight);
         }
       }
 
-      // console.log(withId, lastChatingData.from)
-      // console.log(lastChatingData.from)
-      // console.log(lastChatingData.from === withId)
-
-      // if ( lastChatingData.from === withId ) { // 최근 채팅이 상대가 보낸 채팅일 때
-
-      //   console.log("df", document.documentElement.scrollTop)
-      //   console.log("fg", document.documentElement.scrollHeight)
-      //   console.log("presentViewPosition", presentViewPosition)
-      //   console.log(document.documentElement.scrollHeight - document.documentElement.scrollTop)
-      //   console.log(document.documentElement.scrollHeight-window.scrollY)
-
-      //   if ( window.scrollY + window.innerHeight >= document.body.scrollHeight - 20  ) { // 스크롤이 맨 하단부에 있다면
-      //     window.scrollTo(0, document.body.scrollHeight);
-      //   }
-      // }
     }
 
-    return () => {
-      io.disconnect();
-    };
-  }, [chatState]);
+    // return () => {
+    //   io.disconnect();
+    // };
+  }, [chatState, isScrollBottom]);
 
   return (
     <>
@@ -245,7 +188,8 @@ const ChatRoom = () => {
       </S.Content>
 
       {monitorReceiving &&
-      !isScrollBottom.current &&
+      // !isScrollBottom.current &&
+      !setIsScrollBottom &&
       chatState[chatState.length - 1].from === withId ? (
         <S.ToRecentChat onClick={toNewChat}>
           <S.RecentChatProfileImg
@@ -267,7 +211,8 @@ const ChatRoom = () => {
         </S.ToRecentChat>
       ) : null}
 
-      {!isScrollBottom.current && !monitorReceiving ? (
+      {!setIsScrollBottom
+      && !monitorReceiving ? (
         <S.ScrollDownBtn onClick={toNewChat}>
           <S.ScrollDownImg
             img

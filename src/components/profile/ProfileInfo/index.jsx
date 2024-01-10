@@ -37,7 +37,7 @@ const ProfileInfo = () => {
 
   const toChatRoom = async () => {
 
-    await fetch("http://localhost:8080/chat/request", {
+    await fetch(`${process.env.REACT_APP_SERVER_URL}/chat/request`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', // JSON 형식으로 데이터 전송

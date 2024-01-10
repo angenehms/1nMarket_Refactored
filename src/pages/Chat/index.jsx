@@ -33,7 +33,7 @@ const Chat = () => {
   useEffect(() => {
     const getChatList = async () => {
       const data = await fetch(
-        `http://localhost:8080/chat?loginId=${loginId}`,
+        `${process.env.REACT_APP_SERVER_URL}/chat?loginId=${loginId}`,
         {
           method: 'GET',
         },

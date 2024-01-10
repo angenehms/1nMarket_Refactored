@@ -9,7 +9,7 @@ import io from 'socket.io-client';
 
 const ChatRoom = () => {
   // 서버의 주소를 입력합니다.
-  const socket = io('http://localhost:8080');
+  const socket = io(`${process.env.REACT_APP_SERVER_URL}`);
   const { id } = useParams(); // 채팅방 다큐먼트 고유아이디
   const loginId = JSON.parse(localStorage.getItem('id')); // 로그인된 id
   const [chatState, setChatState] = useState([]);
@@ -53,7 +53,7 @@ const ChatRoom = () => {
   };
 
   const getFirstData = async () => {
-    const mountData = await fetch(`http://localhost:8080/chat/${id}`, {
+    const mountData = await fetch(`${process.env.REACT_APP_SERVER_URL}/chat/${id}`, {
       method: 'GET',
     }).then((r) => r.json());
 

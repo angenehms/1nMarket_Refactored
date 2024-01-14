@@ -119,8 +119,6 @@ const ChatRoom = () => {
   useEffect(() => {
     const lastChatingData = chatState[chatState.length - 1]; // pop() 으로 하면 버그발생 - 원본배열수정이슈로 인한 ..
 
-    
-
     if (lastChatingData !== undefined) {
 
       if (lastChatingData.from === loginId) {
@@ -189,7 +187,7 @@ const ChatRoom = () => {
 
       {monitorReceiving &&
       // !isScrollBottom.current &&
-      !setIsScrollBottom &&
+      !isScrollBottom &&
       chatState[chatState.length - 1].from === withId ? (
         <S.ToRecentChat onClick={toNewChat}>
           <S.RecentChatProfileImg
@@ -211,7 +209,7 @@ const ChatRoom = () => {
         </S.ToRecentChat>
       ) : null}
 
-      {!setIsScrollBottom
+      {!isScrollBottom
       && !monitorReceiving ? (
         <S.ScrollDownBtn onClick={toNewChat}>
           <S.ScrollDownImg

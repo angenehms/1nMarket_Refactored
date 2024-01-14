@@ -131,6 +131,7 @@ const ChatRoom = () => {
         if (isScrollBottom) {
           // 채팅창 스크롤이 가장 하단에 있는데 상대에게 메세지가 온경우 -> 반대로 스크롤이 위에있을 경우엔 상대메세지가 와도 스크롤 다운이 일어나지 않음
           window.scrollTo(0, document.body.scrollHeight);
+          setMonitorReceiving(false)
         }
       }
 

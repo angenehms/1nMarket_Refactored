@@ -1,9 +1,15 @@
 # 자취러들의 현명한 소비생활, 1n마켓 🛒
 
-📌 **배포 URL** : https://sg-1nmarket.netlify.app/
+📌 **배포 URL** <br/>
+https://sg-1nmarket.netlify.app/
 
-📌 **계정** `ID` 1nmarket@sharebuy.com <br />
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; `PW` 1nmarket
+📌 **메인 계정** <br/>
+`ID` 1nmarket@sharebuy.com <br />
+`PW` 1nmarket
+
+📌 **채팅 파트너 계정** <br/>
+`ID` 1nmarket2@sharebuy.com <br />
+`PW` 1nmarket2
 
 <br />
    
@@ -39,7 +45,8 @@
 ### [기술]
 
 - Frontend: React, React-router, Styled-components, Axios, Eslint, Prettier
-- Backend: 제공된 API 사용
+- Backend: 제공된 API 사용, NodeJS express(리팩토링)
+- Database : MongoDB(리팩토링)
 
 ### [협업 도구]
 
@@ -655,16 +662,16 @@ const [productPrice, setProductPrice] = useState(state?.price || '');
 
 ## 7. 앞으로의 업데이트 계획
 
-### 1) [리팩토링] 전역 상태관리 사용
+### 1) [리팩토링] 전역 상태관리 사용 - 완료!
 
 - 지금은 사용자의 정보나 반복해서 사용해야하는 데이터들을 로컬 스토리지 혹은 props로 관리하고 있어, 내용이 많아질수록 관리가 어려워집니다. 리팩토링 단계에서는 데이터를 효율적으로 관리하고자 전역 상태 관리 라이브러리를 사용해보고자 합니다.
 
-### 2) [리팩토링] 이미지 스프라이트 기법 사용
+### 2) [업그레이드] 채팅서비스 구현 - 완료!
+
+- 현재 기능 없이 UI 만 구현되어 있는 채팅 서비스의 기능을 실제로 구현해보고자 합니다.
+
+### 3) [리팩토링] 이미지 스프라이트 기법 사용
 
 - 현재 단일 파일로 되어있는 아이콘 이미지들을 스프라이트 이미지로 변경하고, 이미지 로딩 속도를 개선시켜 사용자에게 좀 더 쾌적한 환경을 제공하고자 합니다.
-
-### 3) 추가 기능 구현
-
-- 채팅 기능 구현 및 소셜 로그인 기능을 조금 더 완성도를 높일 예정입니다.
 
 <p align="right"><a href="#top">🔼 Top</a></p>

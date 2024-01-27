@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import * as S from './style';
 import { ReactComponent as HomeIcon } from '../../../assets/icons/icon-home.svg';
@@ -14,6 +14,10 @@ import { useLocation } from 'react-router-dom';
 const Navbar = () => {
   const accountName = JSON.parse(localStorage.getItem('accountname'));
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <>

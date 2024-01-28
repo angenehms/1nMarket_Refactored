@@ -12,12 +12,13 @@ const ProductList = () => {
   const [productList, setProductList] = useState([]);
   const [openModal, setOpenModal] = useState(false);
 
-  const { data } = useQuery(["getProductList", accountname, productList], async () => {
+  const { data, isLoading } = useQuery(["getProductList", accountname, productList], async () => {
     return await axiosPrivate.get(`/product/${accountname}`).then((result) => {
       setProductList(result);
       return result
     })
   })
+  console.log(isLoading)
 
   // useEffect(() => {
   //   const getProductList = async () => {
@@ -35,7 +36,7 @@ const ProductList = () => {
 
   return (
     <>
-      {data?.data.product.length === 0 ? null : (
+      {data?.data.product.length === 0 ? null : isLoading? null : (
         <S.ProductListWrapper>
           <S.ProductBox>
             <S.Title>1/N하고 있는 상품</S.Title>

@@ -7,7 +7,7 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       setSplash(false);
-    }, 2000);
+    }, 1300);
   }, []);
   return <>{splash ? <SplashImg /> : <Router />}</>;
 }

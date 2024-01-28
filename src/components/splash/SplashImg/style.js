@@ -19,7 +19,7 @@ export const SplashWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: ${logoAnimation} 2s 1;
+  animation: ${logoAnimation} 1.3s 1;
 
   @media screen and (max-width: 300px) {
     height: 100svh;

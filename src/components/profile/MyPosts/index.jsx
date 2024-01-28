@@ -1,28 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { PostsList, PostAlbum } from 'components';
 import * as S from './style';
 import { axiosPrivate } from 'apis/axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { ActionObj_MyPosts } from 'store';
+import { useQuery } from 'react-query';
 
 const MyPosts = () => {
   const dispatch = useDispatch();
   const postsList = useSelector((state) => state.myPostsList);
   const { accountname } = useParams();
   const [selectList, setSelectList] = useState(true);
-  const filteredPostsList = postsList.filter((item) => item.image);
 
-  useEffect(() => {
-    const getAllPosts = async () => {
-      const {
-        data: { post },
-      } = await axiosPrivate.get(`/post/${accountname}/userpost`);
+  const { data } = useQuery(["getAllPosts", accountname, postsList] , async () => {
+    return await axiosPrivate.get(`/post/${accountname}/userpost`).then((result) => {
+      dispatch(ActionObj_MyPosts(result.data.post));
+      return result;
+    });
+  })
 
-      dispatch(ActionObj_MyPosts(post));
-    };
-    getAllPosts();
-  }, [accountname]);
+  const filteredPostsList = data?.data.post.filter((item) => item.image);
+
+  // useEffect(() => { // 위의 useQuery 코드로 대체
+  //   const getAllPosts = async () => {
+  //     const {
+  //       data: { post },
+  //     } = await axiosPrivate.get(`/post/${accountname}/userpost`);
+
+  //     dispatch(ActionObj_MyPosts(post));
+  //   };
+  //   getAllPosts();
+  // }, [accountname]);
 
   return (
     <>
@@ -42,7 +51,7 @@ const MyPosts = () => {
         </S.PostHeader>
       </S.HeaderWrapper>
       {selectList ? (
-        <PostsList postsList={postsList} />
+        <PostsList postsList={data?.data.post} />
       ) : (
         <PostAlbum postsList={filteredPostsList} />
       )}

@@ -6,9 +6,12 @@ const PostsList = ({postsList}) => {
   return (
     <S.PostsContainer>
       <S.PostWrapper>
-        {postsList.map((post) => (
+        {postsList ? 
+        postsList.map((post) => (
           <PostItem key={post.id} post={post}/>
-        ))}
+        )) : <></>
+        
+        }
       </S.PostWrapper>
     </S.PostsContainer>
   );

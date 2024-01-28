@@ -4,6 +4,7 @@ import { axiosPrivate } from 'apis/axios';
 import * as S from './style';
 import { ReactComponent as MessageIcon } from '../../../assets/icons/icon-message-circle.svg';
 import { ReactComponent as ShareIcon } from '../../../assets/icons/icon-share.svg';
+import { useQuery } from 'react-query';
 
 const ProfileInfo = () => {
   const { accountname } = useParams();
@@ -23,11 +24,11 @@ const ProfileInfo = () => {
 
   const {
     _id,
-    followerCount,
-    followingCount,
+    // followerCount,
+    // followingCount,
     image = '',
     intro,
-    isfollow,
+    // isfollow,
     username,
   } = profile;
 
@@ -55,15 +56,22 @@ const ProfileInfo = () => {
     
   };
 
-  useEffect(() => {
-    const getUserInfo = async () => {
-      const {
-        data: { profile },
-      } = await axiosPrivate.get(`/profile/${accountname}`);
-      setProfile(profile);
-    };
-    getUserInfo();
-  }, [accountname]);
+  const { data, isLoading } = useQuery(['userData', accountname, profile], async () =>{
+    return await axiosPrivate.get(`/profile/${accountname}`).then((result) => {
+      setProfile(result.data.profile);
+      return result
+    })}
+  );
+
+  // useEffect(() => { // 바로 위 useQuery 식으로 대체
+  //   const getUserInfo = async () => {
+  //     const {
+  //       data: { profile },
+  //     } = await axiosPrivate.get(`/profile/${accountname}`);
+  //     setProfile(profile);
+  //   };
+  //   getUserInfo();
+  // }, [accountname]);
 
   const isMyProfile =
     JSON.parse(localStorage.getItem('accountname')) === accountname
@@ -92,28 +100,29 @@ const ProfileInfo = () => {
     <S.ProfileSection>
       <S.TopContent>
         <S.CustomLink to={`followers`}>
-          <S.Count>{followerCount}</S.Count>
+          <S.Count>{data?.data.profile.followerCount}</S.Count>
           <S.CountInfo>followers</S.CountInfo>
         </S.CustomLink>
         <S.ProfileImg
           src={
-            image.includes('mandarin.api')
-              ? image.replace('mandarin.api', 'api.mandarin')
-              : image
+            isLoading ? 'https://api.mandarin.weniv.co.kr/1671431659709.png' :
+            data?.data.profile.image.includes('mandarin.api')
+              ? data?.data.profile.image.replace('mandarin.api', 'api.mandarin')
+              : data?.data.profile.image
           }
           alt={`${accountname}의 프로필 사진`}
           onError={onErrorImg}
         />
 
         <S.CustomLink to={`followings`}>
-          <S.Count right>{followingCount}</S.Count>
+          <S.Count right>{data?.data.profile.followingCount}</S.Count>
           <S.CountInfo>followings</S.CountInfo>
         </S.CustomLink>
       </S.TopContent>
 
-      <S.Name>{username}</S.Name>
+      <S.Name>{data?.data.profile.username}</S.Name>
       <S.AccountName>{accountname}</S.AccountName>
-      <S.Intro>{intro}</S.Intro>
+      <S.Intro>{data?.data.profile.intro}</S.Intro>
 
       <S.ButtonWrapper>
         {isMyProfile ? (
@@ -136,12 +145,12 @@ const ProfileInfo = () => {
                 }}
               />
             </S.IconButton>
-            {isfollow ? (
-              <S.YourProfileButton onClick={handleUnfollow} isfollow={isfollow}>
+            {data?.data.profile.isfollow ? (
+              <S.YourProfileButton onClick={handleUnfollow} isfollow={data?.data.profile.isfollow}>
                 언팔로우
               </S.YourProfileButton>
             ) : (
-              <S.YourProfileButton onClick={handleFollow} isfollow={isfollow}>
+              <S.YourProfileButton onClick={handleFollow} isfollow={data?.data.profile.isfollow}>
                 팔로우
               </S.YourProfileButton>
             )}

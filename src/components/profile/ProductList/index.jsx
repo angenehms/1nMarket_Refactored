@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 import { useState } from 'react';
-import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { axiosPrivate } from 'apis/axios';
 import { ProductModal } from 'components';
 import * as S from './style';
+import { useQuery } from 'react-query';
 
 const ProductList = () => {
   // params 객체로 받아옴
@@ -12,15 +12,22 @@ const ProductList = () => {
   const [productList, setProductList] = useState([]);
   const [openModal, setOpenModal] = useState(false);
 
-  useEffect(() => {
-    const getProductList = async () => {
-      const {
-        data: { product },
-      } = await axiosPrivate.get(`/product/${accountname}`);
-      setProductList(product);
-    };
-    getProductList();
-  }, [accountname]);
+  const { data } = useQuery(["getProductList", accountname, productList], async () => {
+    return await axiosPrivate.get(`/product/${accountname}`).then((result) => {
+      setProductList(result);
+      return result
+    })
+  })
+
+  // useEffect(() => {
+  //   const getProductList = async () => {
+  //     const {
+  //       data: { product },
+  //     } = await axiosPrivate.get(`/product/${accountname}`);
+  //     setProductList(product);
+  //   };
+  //   getProductList();
+  // }, [accountname]);
 
   const onErrorImg = (e) => {
     e.target.src = 'https://api.mandarin.weniv.co.kr/1672556398304.png';
@@ -28,12 +35,12 @@ const ProductList = () => {
 
   return (
     <>
-      {productList.length === 0 ? null : (
+      {data?.data.product.length === 0 ? null : (
         <S.ProductListWrapper>
           <S.ProductBox>
             <S.Title>1/N하고 있는 상품</S.Title>
             <S.ProductList>
-              {productList.map((product, i) => (
+              {data?.data.product.map((product, i) => (
                 <Fragment key={product.id}>
                   <S.ProductItem onClick={() => setOpenModal(true)}>
                     <S.ProductListImg

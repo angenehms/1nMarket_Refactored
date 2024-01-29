@@ -1,9 +1,9 @@
 import { createStore } from 'redux';
 
-export const ActionObj_Home = (posts) => ({
-  type: 'Home_Page_SetPostsList',
-  payload: posts,
-});
+// export const ActionObj_Home = (posts) => ({
+//   type: 'Home_Page_SetPostsList',
+//   payload: posts,
+// });
 
 export const ActionObj_MyPosts = (post) => ({
   type: 'MyPosts_Components_SetPostsList',
@@ -24,7 +24,7 @@ export const store = createStore(function (currentState, action) {
   if (currentState === undefined) {
     // 스테이트 저장공간
     return {
-      postsList: [],
+      // postsList: [],
       myPostsList: [],
       postPagePost: [],
     };
@@ -36,9 +36,9 @@ export const store = createStore(function (currentState, action) {
     newState.postsList = [...newState.postsList, ...action.payload];
   }
 
-  if (action.type === 'Home_Page_SetPostsList_CleanUp') {
-    newState.postsList = [];
-  }
+  // if (action.type === 'Home_Page_SetPostsList_CleanUp') {
+  //   newState.postsList = [];
+  // }
 
   if (action.type === 'MyPosts_Components_SetPostsList') {
     newState.myPostsList = [...action.payload];

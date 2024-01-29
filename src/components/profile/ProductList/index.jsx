@@ -18,7 +18,6 @@ const ProductList = () => {
       return result
     })
   })
-  console.log(isLoading)
 
   // useEffect(() => {
   //   const getProductList = async () => {

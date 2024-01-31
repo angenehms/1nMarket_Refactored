@@ -4,6 +4,7 @@ import { axiosPrivate } from 'apis/axios';
 import { UserProfileForm, SaveHeader } from 'components';
 import { useTitle } from 'hooks';
 import * as S from './style';
+import { setCookie } from '../../cookie';
 
 const ProfileModify = () => {
   useTitle('1nMarket - ProfileModify');
@@ -29,8 +30,11 @@ const ProfileModify = () => {
         },
       }),
     );
-    localStorage.setItem('accountname', JSON.stringify(accountname));
-    localStorage.setItem('profile-img', JSON.stringify(profileImg));
+    
+    setCookie('accountname', JSON.stringify(accountname));
+    setCookie('profile-img', JSON.stringify(profileImg));
+    // localStorage.setItem('accountname', JSON.stringify(accountname));
+    // localStorage.setItem('profile-img', JSON.stringify(profileImg));
     navigate(`/profile/${accountname}`);
   };
 

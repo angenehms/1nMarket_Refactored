@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import AlertModalLayout from '../AlertModalLayout';
+import { removeCookie } from '../../../cookie';
 
 const LogoutModal = ({ setOpenModal, setOpenAlert }) => {
   const navigate = useNavigate();
@@ -11,10 +12,14 @@ const LogoutModal = ({ setOpenModal, setOpenAlert }) => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("id");
-    localStorage.removeItem('token');
-    localStorage.removeItem('accountname');
-    localStorage.removeItem('profile-img');
+    removeCookie('token');
+    removeCookie("id");
+    removeCookie('accountname');
+    removeCookie('profile-img');
+    // localStorage.removeItem('token');
+    // localStorage.removeItem("id");
+    // localStorage.removeItem('accountname');
+    // localStorage.removeItem('profile-img');
     navigate('/');
   };
 

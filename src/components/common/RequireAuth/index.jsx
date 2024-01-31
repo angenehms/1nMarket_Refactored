@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { axiosPrivate } from '../../../apis/axios';
+import { getCookie, removeCookie } from '../../../cookie';
 
 const RequireAuth = () => {
-  const token = JSON.parse(localStorage.getItem('token'));
+  const token = getCookie('token')
+  // const token = JSON.parse(localStorage.getItem('token'));
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -12,12 +14,14 @@ const RequireAuth = () => {
       try {
         const { data: isValid } = await axiosPrivate.get('/user/checktoken');
         if (!isValid) {
-          localStorage.removeItem('token');
+          removeCookie('token');
+          // localStorage.removeItem('token');
           navigate('/login');
         }
       } catch (err) {
-        localStorage.removeItem('token');
-        navigate('/login');
+          removeCookie('token');
+          // localStorage.removeItem('token');
+          navigate('/login');
       }
     };
     isValid();

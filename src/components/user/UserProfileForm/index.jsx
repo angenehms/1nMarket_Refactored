@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { axiosImgUpload, axiosPrivate } from 'apis/axios';
 import * as S from './style';
+import { getCookie } from '../../../cookie';
 
 const USERNAME_REGEX = /^[a-zA-Z0-9ㄱ-ㅎ가-힣]{2,10}$/;
 // eslint-disable-next-line
@@ -26,7 +27,8 @@ const UserProfileForm = ({
     pathname.includes('/edit') ? true : false,
   );
   const [errAccountNameMsg, setErrAccountNameMsg] = useState('');
-  const userAccountname = JSON.parse(localStorage.getItem('accountname')) || '';
+  const userAccountname = getCookie('accountname') || '';
+  // const userAccountname = JSON.parse(localStorage.getItem('accountname')) || '';
 
   const handleImgUpload = async (e) => {
     if (!e.target.files[0]) return;

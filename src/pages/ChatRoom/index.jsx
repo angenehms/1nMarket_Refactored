@@ -6,12 +6,14 @@ import { ReactComponent as ChatIcon } from './../../assets/icons/icon-message-ci
 import { useEffect } from 'react';
 import DownArrowIcon from '../../assets/icons/icon-arrow-down.png';
 import io from 'socket.io-client';
+import { getCookie } from '../../cookie';
 
 const ChatRoom = () => {
   // 서버의 주소를 입력합니다.
   const socket = io(`${process.env.REACT_APP_SERVER_URL}`);
   const { id } = useParams(); // 채팅방 다큐먼트 고유아이디
-  const loginId = JSON.parse(localStorage.getItem('id')); // 로그인된 id
+  const loginId = getCookie('id'); // 로그인된 id
+  // const loginId = JSON.parse(localStorage.getItem('id')); // 로그인된 id
   const [chatState, setChatState] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [toggle, setToggle] = useState(false);
@@ -29,7 +31,8 @@ const ChatRoom = () => {
   const withUsername = searchParams.get('withUsername');
   const withProfileImg = searchParams.get('writerImg');
 
-  const loginIdProfileImg = JSON.parse(localStorage.getItem('profile-img'));
+  const loginIdProfileImg = getCookie('profile-img');
+  // const loginIdProfileImg = JSON.parse(localStorage.getItem('profile-img'));
   const handleSubmit = (e) => {
     e.preventDefault();
 

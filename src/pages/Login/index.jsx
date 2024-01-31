@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'apis/axios';
 import { useTitle } from 'hooks';
 import * as S from './style';
+import { setCookie, getCookie } from '../../cookie';
 
 const Login = () => {
   useTitle('1nMarket - Login');
@@ -15,7 +16,6 @@ const Login = () => {
   const inputRef = useRef();
 
   const from = location.state?.from?.pathname || '/';
-
   const canLogin = !!email.length && !!password.length;
 
   const handleSubmit = async (e) => {
@@ -34,14 +34,20 @@ const Login = () => {
     if (data?.status === 422) {
       return setErrMsg(data?.message);
     }
+
+    setCookie('token', data?.user?.token);
+    setCookie("id", data?.user?._id)
+    setCookie('profile-img', data?.user?.image);
+    setCookie('accountname', data?.user?.accountname);
+
+    // localStorage.setItem('token', JSON.stringify(data?.user?.token));
+    // localStorage.setItem("id", JSON.stringify(data?.user?._id))
+    // localStorage.setItem('profile-img', JSON.stringify(data?.user?.image));
+    // localStorage.setItem(
+    //   'accountname',
+    //   JSON.stringify(data?.user?.accountname),
+    // );
     
-    localStorage.setItem("id", JSON.stringify(data?.user?._id))
-    localStorage.setItem('token', JSON.stringify(data?.user?.token));
-    localStorage.setItem('profile-img', JSON.stringify(data?.user?.image));
-    localStorage.setItem(
-      'accountname',
-      JSON.stringify(data?.user?.accountname),
-    );
     setEmail('');
     setPassword('');
     navigate(from, { replace: true });
@@ -49,7 +55,8 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (JSON.parse(localStorage.getItem('token'))) {
+    if (getCookie('token')) {
+    // if (JSON.parse(localStorage.getItem('token'))) {
       navigate('/home');
     }
   }, []);

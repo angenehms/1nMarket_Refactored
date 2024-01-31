@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getCookie } from '../cookie'
 
 const BASE_URL = 'https://api.mandarin.weniv.co.kr';
 
@@ -25,7 +26,8 @@ export const axiosPrivate = axios.create({
 
 axiosPrivate.interceptors.request.use(
   (config) => {
-    const token = JSON.parse(localStorage.getItem('token'));
+    const token = getCookie('token');
+    // const token = JSON.parse(localStorage.getItem('token'));
 
     if (!config.headers['Authorization']) {
       config.headers['Authorization'] = `Bearer ${token}`;

@@ -10,9 +10,11 @@ import { ReactComponent as ChatIconFill } from '../../../assets/icons/icon-messa
 import { ReactComponent as PostIconFill } from '../../../assets/icons/icon-edit-fill.svg';
 import { ReactComponent as ProfileIconFill } from '../../../assets/icons/icon-user-fill.svg';
 import { useLocation } from 'react-router-dom';
+import { getCookie } from '../../../cookie';
 
 const Navbar = () => {
-  const accountName = JSON.parse(localStorage.getItem('accountname'));
+  const accountName = getCookie('accountname');
+  // const accountName = JSON.parse(localStorage.getItem('accountname'));
   const { pathname } = useLocation();
 
   useEffect(() => {

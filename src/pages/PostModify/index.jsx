@@ -4,13 +4,15 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { axiosPrivate } from 'apis/axios';
 import { UploadHeader, PostForm } from 'components';
 import { useTitle } from 'hooks';
+import { getCookie } from '../../cookie';
 
 const PostModify = () => {
   useTitle('1nMarket - PostModify');
   const { state } = useLocation();
   const navigate = useNavigate();
   const { postId } = useParams();
-  const accountName = JSON.parse(localStorage.getItem('accountname'));
+  const accountName = getCookie('accountname')
+  // const accountName = JSON.parse(localStorage.getItem('accountname'));
 
   const [content, setContent] = useState(state?.content || '');
   const [imgFiles, setImgFiles] = useState(state?.image?.split(',') || []);

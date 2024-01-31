@@ -3,6 +3,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { SaveHeader, ProductForm } from 'components';
 import { axiosPrivate } from 'apis/axios';
 import { useTitle } from 'hooks';
+import { getCookie } from '../../cookie';
 
 const ProductModify = () => {
   useTitle('1nMarket - ProductModify');
@@ -16,7 +17,8 @@ const ProductModify = () => {
 
   const navigate = useNavigate();
   const { productId } = useParams();
-  const accountName = JSON.parse(localStorage.getItem('accountname'));
+  const accountName = getCookie('accountname');
+  // const accountName = JSON.parse(localStorage.getItem('accountname'));
 
   useEffect(() => {
     if (!state) navigate('/home');

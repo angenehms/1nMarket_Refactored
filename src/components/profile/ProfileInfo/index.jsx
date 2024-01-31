@@ -5,10 +5,12 @@ import * as S from './style';
 import { ReactComponent as MessageIcon } from '../../../assets/icons/icon-message-circle.svg';
 import { ReactComponent as ShareIcon } from '../../../assets/icons/icon-share.svg';
 import { useQuery } from 'react-query';
+import { getCookie } from '../../../cookie';
 
 const ProfileInfo = () => {
   const { accountname } = useParams();
-  const loginIdAccountname = JSON.parse(localStorage.getItem("accountname"))
+  const loginIdAccountname = getCookie("accountname");
+  // const loginIdAccountname = JSON.parse(localStorage.getItem("accountname"))
   const [loginIdUsername, setLoginIdUsername] = useState("") 
   const [profile, setProfile] = useState({});
 
@@ -33,8 +35,10 @@ const ProfileInfo = () => {
   } = profile;
 
   const navigate = useNavigate();
-  const loginId = JSON.parse(localStorage.getItem('id'));
-  const loginIdProfileImg = JSON.parse(localStorage.getItem('profile-img'))
+  const loginId = getCookie('id');
+  const loginIdProfileImg = getCookie('profile-img');
+  // const loginId = JSON.parse(localStorage.getItem('id'));
+  // const loginIdProfileImg = JSON.parse(localStorage.getItem('profile-img'))
 
   const toChatRoom = async () => {
 
@@ -74,7 +78,8 @@ const ProfileInfo = () => {
   // }, [accountname]);
 
   const isMyProfile =
-    JSON.parse(localStorage.getItem('accountname')) === accountname
+    getCookie('accountname') === accountname
+    // JSON.parse(localStorage.getItem('accountname')) === accountname
       ? true
       : false;
 

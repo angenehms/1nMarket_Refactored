@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import * as S from './style';
 import { ProductAlertModal, ModalLayout } from 'components';
+import { getCookie } from '../../../cookie';
 
 const ProductModal = ({
   link,
@@ -11,7 +12,8 @@ const ProductModal = ({
   setOpenModal,
 }) => {
   const [openAlert, setOpenAlert] = useState(false);
-  const accountname = JSON.parse(localStorage.getItem('accountname'));
+  const accountname = getCookie('accountname');
+  // const accountname = JSON.parse(localStorage.getItem('accountname'));
 
   return accountname === product.author.accountname ? (
     <>

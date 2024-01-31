@@ -6,13 +6,15 @@ import { ReactComponent as UnLikeIcon } from 'assets/icons/unheart.svg';
 import { ReactComponent as LikeIcon } from 'assets/icons/heart.svg';
 import { ReactComponent as CommentIcon } from 'assets/icons/message-circle.svg';
 import { MyPostModal, PostModal } from 'components';
+import { getCookie } from '../../../cookie';
 
 const PostItem = ({ post }) => {
   const [openModal, setOpenModal] = useState(false);
   const [heart, setHeart] = useState(post.hearted || false);
   const [heartCount, setHearCount] = useState(post.heartCount || 0);
   const images = post?.image?.split(',');
-  const accountname = JSON.parse(localStorage.getItem('accountname'));
+  const accountname = getCookie('accountname');
+  // const accountname = JSON.parse(localStorage.getItem('accountname'));
 
   const handleLike = async () => {
     await axiosPrivate.post(`/post/${post.id}/heart`);

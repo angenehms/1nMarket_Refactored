@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { axiosPrivate } from 'apis/axios';
 import { UploadHeader, PostForm } from 'components';
 import { useTitle } from 'hooks';
+import { getCookie } from '../../cookie';
 
 const PostUpload = () => {
   useTitle('1nMarket - PostUpload');
@@ -24,7 +25,8 @@ const PostUpload = () => {
         },
       }),
     );
-    navigate(`/profile/${JSON.parse(localStorage.getItem('accountname'))}`);
+    navigate(`/profile/${getCookie('accountname')}`);
+    // navigate(`/profile/${JSON.parse(localStorage.getItem('accountname'))}`);
   };
 
   return (

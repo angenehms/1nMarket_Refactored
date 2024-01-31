@@ -3,12 +3,16 @@ import { ProfileHeader } from 'components';
 import { useTitle } from 'hooks';
 import * as S from './style';
 import { axiosPrivate } from 'apis/axios';
+import { getCookie } from '../../cookie';
 
 const Chat = () => {
-  const loginId = JSON.parse(localStorage.getItem('id'));
-  const loginIdAccountname = JSON.parse(localStorage.getItem("accountname"));
+  const loginId = getCookie('id');
+  const loginIdAccountname = getCookie("accountname");
+  const loginIdProfileImg = getCookie("profile-img");
+  // const loginId = JSON.parse(localStorage.getItem('id'));
+  // const loginIdAccountname = JSON.parse(localStorage.getItem("accountname"));
+  // const loginIdProfileImg = JSON.parse(localStorage.getItem("profile-img"));
   const [loginIdUsername, setLoginIdUsername] = useState("");
-  const loginIdProfileImg = JSON.parse(localStorage.getItem("profile-img"));
   const [chatList, setChatList] = useState([]);
 
   useEffect(() => {

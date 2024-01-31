@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { ReactComponent as UploadIcon } from 'assets/icons/icon-upload.svg';
 import { axiosImgUpload } from 'apis/axios';
 import * as S from './style';
+import { getCookie } from '../../../cookie';
 
 const PostForm = ({ content, setContent, imgFiles, setImgFiles }) => {
   const textRef = useRef();
@@ -30,7 +31,8 @@ const PostForm = ({ content, setContent, imgFiles, setImgFiles }) => {
     setImgFiles((prev) => prev.filter((_, i) => idx !== i));
   };
 
-  const profileImg = JSON.parse(localStorage.getItem('profile-img'));
+  const profileImg = getCookie('profile-img');
+  // const profileImg = JSON.parse(localStorage.getItem('profile-img'));
 
   return (
     <S.Conatiner>

@@ -13,7 +13,6 @@ const ProductModal = ({
 }) => {
   const [openAlert, setOpenAlert] = useState(false);
   const accountname = getCookie('accountname');
-  // const accountname = JSON.parse(localStorage.getItem('accountname'));
 
   return accountname === product.author.accountname ? (
     <>

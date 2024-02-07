@@ -26,7 +26,6 @@ const PostUpload = () => {
       }),
     );
     navigate(`/profile/${getCookie('accountname')}`);
-    // navigate(`/profile/${JSON.parse(localStorage.getItem('accountname'))}`);
   };
 
   return (

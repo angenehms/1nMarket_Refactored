@@ -35,18 +35,11 @@ const Login = () => {
       return setErrMsg(data?.message);
     }
 
+    setCookie('username', data?.user?.username);
     setCookie('token', data?.user?.token);
     setCookie("id", data?.user?._id)
     setCookie('profile-img', data?.user?.image);
     setCookie('accountname', data?.user?.accountname);
-
-    // localStorage.setItem('token', JSON.stringify(data?.user?.token));
-    // localStorage.setItem("id", JSON.stringify(data?.user?._id))
-    // localStorage.setItem('profile-img', JSON.stringify(data?.user?.image));
-    // localStorage.setItem(
-    //   'accountname',
-    //   JSON.stringify(data?.user?.accountname),
-    // );
     
     setEmail('');
     setPassword('');
@@ -56,7 +49,6 @@ const Login = () => {
 
   useEffect(() => {
     if (getCookie('token')) {
-    // if (JSON.parse(localStorage.getItem('token'))) {
       navigate('/home');
     }
   }, []);

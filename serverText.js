@@ -1,34 +1,36 @@
-// // 후에 env 파일로 관리할 민감정보들은 @@@ 로 표기함
-
 // const express = require("express");
-// const app = express(); // express 라이브러리를 사용하겠다는 뜻 // 익스프레스 사용법
+// const { createServer } = require("http");
+// const { Server } = require("socket.io");
 // const { MongoClient, ObjectId } = require("mongodb");
 // require("dotenv").config();
 
-// const { createServer } = require("http");
-// const { Server } = require("socket.io");
+// let db;
+// const dbNAME = process.env.DB_NAME;
+// const dbURL = process.env.DB_URL; // 정보 !! @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// // 'MongoDB 사이트에 있던 님들의 DB 접속 URL'
+// const projectURL = process.env.PROJECT_URL;
+// const serverPORT = process.env.PORT;
+
+// const app = express(); // express 라이브러리를 사용하겠다는 뜻 // 익스프레스 사용법
 // const server = createServer(app);
 // const io = new Server(server, {
 //   cors: {
-//     origin: process.env.PROJECT_URL, // 정보 !! @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//     origin: projectURL, // 정보 !! @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //     methods: ["GET", "POST"],
 //   },
 // });
 
-// let db;
-// const url = process.env.DB_URL; // 정보 !! @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-// // 'MongoDB 사이트에 있던 님들의 DB 접속 URL'
-// new MongoClient(url)
+// new MongoClient(dbURL)
 //   .connect()
 //   .then((client) => {
 //     // MongoDB 접속코드, 접속성공시 DB 에 연결, 실패시 에러메세지
 //     console.log("DB연결성공");
-//     db = client.db(process.env.DB_NAME); // process.env.DB_NAME 는 DB 이름으로써 자유작명
-//     server.listen(process.env.PORT, () => {
+//     db = client.db(dbNAME); // dbNAME 는 process.env.DB_NAME 으로 DB 이름이며 자유작명
+//     server.listen(serverPORT, () => {
 //       // 어 이건 서버 실행코드인데?
 //       // 그치! 디비 연결 성공하면 서버 실행해줘! 라고 하는 게 더 자연스러우니까
 //       // 디비 연결 성공했을 때 같이 써주면 좋아!
-//       console.log("서버 실행중"); // 정보 !! @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//       console.log("서버 실행중", serverPORT); // 정보 !! @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //     });
 //   })
 //   .catch((err) => {
@@ -41,27 +43,42 @@
 // // CORS 설정
 // app.use((req, res, next) => {
 //   // 정보 !! @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//   res.header("Access-Control-Allow-Origin", process.env.PROJECT_URL); // 응답헤더를 리액트 주소로 변경
+//   const allowedOrigin = projectURL;
+//   const requestOrigin = req.headers.origin;
+
+//   if (allowedOrigin === requestOrigin) {
+//     // 쉽게 말해 서버와 연동된 서비스에서 보낸 요청에 대해서만 응답해줘 !! 라는 코드
+//     res.header("Access-Control-Allow-Origin", allowedOrigin);
+//   } else {
+//     return res.status(403).json({ error: "Unauthorized request" });
+//   }
+
+//   // res.header("Access-Control-Allow-Origin", process.env.PROJECT_URL); // 응답헤더를 리액트 주소로 변경
 //   res.header(
 //     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
+//     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
 //   );
+
 //   next();
 // });
 
 // app.post("/chat/request", async (요청, 응답) => {
-//   const isExist = await db.collection("chat").findOne({
+//   const isExist1 = await db.collection("chat").findOne({
 //     member: [new ObjectId(요청.body.loginId), new ObjectId(요청.body._id)],
 //   });
 
-//   if (isExist) {
-//     // 채팅방이 이미 존재하면
+//   const isExist2 = await db.collection("chat").findOne({
+//     member: [new ObjectId(요청.body._id), new ObjectId(요청.body.loginId)],
+//   });
 
-//     const existingChatRoomId = { insertedId: `${isExist._id}` };
+//   const exist = isExist1 || isExist2;
+
+//   if (exist) {
+//     // 채팅방이 이미 존재하면
+//     const existingChatRoomId = { insertedId: `${exist._id}` };
 //     응답.json(existingChatRoomId);
 //   } else {
-//     // 채팅방이 존재하지 않으면
-
+//     // 채팅방이 존재하지 않으a면
 //     const insertedChatRoom = await db.collection("chat").insertOne({
 //       // 다큐먼트 삽입시 리턴값이 있음 console.log(insertedChatRoom) 해보면 앎
 //       member: [new ObjectId(요청.body.loginId), new ObjectId(요청.body._id)],
@@ -92,31 +109,13 @@
 
 // app.get("/chat/:chatRoomId", async (요청, 응답) => {
 //   // 1:1 방 접속시(마운트시)
+
 //   const chatRoomDocument = await db
 //     .collection("chat")
 //     .find({ _id: new ObjectId(요청.params.chatRoomId) })
 //     .toArray();
 
-//   const nowLoginId = chatRoomDocument[0].member[0];
-//   const nowWriterId = chatRoomDocument[0].member[1];
-
-//   const chatData = chatRoomDocument[0].chatData;
-//   let result;
-
-//   if (
-//     chatRoomDocument[0].member[0] === nowLoginId &&
-//     chatRoomDocument[0].member[1] === nowWriterId
-//   ) {
-//     result = { canJoin: true, chatData: chatData };
-//   } else {
-//     result = { canJoin: false, chatData: null };
-//   }
-
-//   // console.log(result);
-//   // console.log(chatRoomDocument[0].member);
-//   // console.log(nowLoginId, nowWriterId);
-
-//   응답.json(result);
+//   응답.json(chatRoomDocument);
 // });
 
 // io.on("connection", (socket) => {

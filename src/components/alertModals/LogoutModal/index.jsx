@@ -12,8 +12,9 @@ const LogoutModal = ({ setOpenModal, setOpenAlert }) => {
   };
 
   const handleLogout = () => {
+    removeCookie('username');
     removeCookie('token');
-    removeCookie("id");
+    removeCookie('id');
     removeCookie('accountname');
     removeCookie('profile-img');
     // localStorage.removeItem('token');

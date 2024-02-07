@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ProfileHeader } from 'components';
+import { ProfileHeader, ProfileModal } from 'components';
 import { useTitle } from 'hooks';
 import * as S from './style';
 import { axiosPrivate } from 'apis/axios';
@@ -9,11 +9,10 @@ const Chat = () => {
   const loginId = getCookie('id');
   const loginIdAccountname = getCookie("accountname");
   const loginIdProfileImg = getCookie("profile-img");
-  // const loginId = JSON.parse(localStorage.getItem('id'));
-  // const loginIdAccountname = JSON.parse(localStorage.getItem("accountname"));
-  // const loginIdProfileImg = JSON.parse(localStorage.getItem("profile-img"));
+  
   const [loginIdUsername, setLoginIdUsername] = useState("");
   const [chatList, setChatList] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     const getLoginIdUsername = async () => {
@@ -25,15 +24,6 @@ const Chat = () => {
     getLoginIdUsername();
   }, [])
 
-  // const getUserInfo = async () => {
-  //   const {
-  //     data: { profile },
-  //   } = await axiosPrivate.get(`/profile/${loginIdAccountname}`);
-  //   console.log(profile.username)
-  // };
-
-  // getUserInfo();
-
   useEffect(() => {
     const getChatList = async () => {
       const data = await fetch(
@@ -42,8 +32,6 @@ const Chat = () => {
           method: 'GET',
         },
       ).then((r) => r.json());
-
-      // console.log("data", data)
 
       setChatList(data);
     };
@@ -54,15 +42,14 @@ const Chat = () => {
   useTitle('1nMarket - Chat');
   return (
     <>
-      <ProfileHeader />
+      <ProfileHeader setOpenModal={setOpenModal} />
       <S.Content>
         <S.ChatList>
           {chatList.map((item, i) => (
             <S.ChatRoomLink
               key={i}
-              to={`/chat/${item._id}?withId=${item.member.filter(i => i !== loginId)}&withUsername=${item.memberUsernames.filter(i => i !== loginIdUsername)}&writerImg=${item.memberProfileImages.filter(i => i !== loginIdProfileImg)}`}
+              to={`/chat/${item._id}`}
             >
-              {/* /chat/${채팅다큐먼트고유id}?with=${글쓴사람username} 로 라우팅 */}
               <S.ChatItem>
                 <S.IconContentWrapper>
                   <S.IconDiv>
@@ -97,6 +84,7 @@ const Chat = () => {
           ))}
         </S.ChatList>
       </S.Content>
+      {openModal && <ProfileModal setOpenModal={setOpenModal} />}
     </>
   );
 };

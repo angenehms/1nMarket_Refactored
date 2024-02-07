@@ -5,7 +5,6 @@ import { getCookie, removeCookie } from '../../../cookie';
 
 const RequireAuth = () => {
   const token = getCookie('token')
-  // const token = JSON.parse(localStorage.getItem('token'));
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -15,12 +14,20 @@ const RequireAuth = () => {
         const { data: isValid } = await axiosPrivate.get('/user/checktoken');
         if (!isValid) {
           removeCookie('token');
-          // localStorage.removeItem('token');
+          removeCookie('accountname');
+          removeCookie('profile-img');
+          removeCookie('id');
+          removeCookie('username');
+
           navigate('/login');
         }
       } catch (err) {
           removeCookie('token');
-          // localStorage.removeItem('token');
+          removeCookie('accountname');
+          removeCookie('profile-img');
+          removeCookie('id');
+          removeCookie('username');
+
           navigate('/login');
       }
     };

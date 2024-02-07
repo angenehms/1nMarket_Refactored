@@ -12,7 +12,6 @@ const PostModify = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
   const accountName = getCookie('accountname')
-  // const accountName = JSON.parse(localStorage.getItem('accountname'));
 
   const [content, setContent] = useState(state?.content || '');
   const [imgFiles, setImgFiles] = useState(state?.image?.split(',') || []);

@@ -14,7 +14,6 @@ const PostItem = ({ post }) => {
   const [heartCount, setHearCount] = useState(post.heartCount || 0);
   const images = post?.image?.split(',');
   const accountname = getCookie('accountname');
-  // const accountname = JSON.parse(localStorage.getItem('accountname'));
 
   const handleLike = async () => {
     await axiosPrivate.post(`/post/${post.id}/heart`);

@@ -31,10 +31,10 @@ const ProfileModify = () => {
       }),
     );
     
+    setCookie('username', JSON.stringify(username));
     setCookie('accountname', JSON.stringify(accountname));
     setCookie('profile-img', JSON.stringify(profileImg));
-    // localStorage.setItem('accountname', JSON.stringify(accountname));
-    // localStorage.setItem('profile-img', JSON.stringify(profileImg));
+
     navigate(`/profile/${accountname}`);
   };
 

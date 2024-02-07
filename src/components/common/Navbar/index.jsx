@@ -14,7 +14,6 @@ import { getCookie } from '../../../cookie';
 
 const Navbar = () => {
   const accountName = getCookie('accountname');
-  // const accountName = JSON.parse(localStorage.getItem('accountname'));
   const { pathname } = useLocation();
 
   useEffect(() => {

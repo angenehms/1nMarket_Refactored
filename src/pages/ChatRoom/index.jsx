@@ -1,6 +1,6 @@
 import { ChatHeader } from 'components';
 import React, { useRef, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as S from './style';
 import { ReactComponent as ChatIcon } from './../../assets/icons/icon-message-circle.svg';
 import { useEffect } from 'react';
@@ -9,30 +9,28 @@ import io from 'socket.io-client';
 import { getCookie } from '../../cookie';
 
 const ChatRoom = () => {
-  // 서버의 주소를 입력합니다.
-  const socket = io(`${process.env.REACT_APP_SERVER_URL}`);
+  const socket = io(`${process.env.REACT_APP_SERVER_URL}`); // 서버의 주소를 입력합니다.
   const { id } = useParams(); // 채팅방 다큐먼트 고유아이디
+
   const loginId = getCookie('id'); // 로그인된 id
-  // const loginId = JSON.parse(localStorage.getItem('id')); // 로그인된 id
+  const loginIdAccountname = getCookie('username');
+  const loginIdProfileImg = getCookie('profile-img');
+  const withId = useRef("");
+  const withUsername = useRef("");
+  const withProfileImg = useRef("");
+
+  const navigate = useNavigate();
+
   const [chatState, setChatState] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [toggle, setToggle] = useState(false);
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  // const isScrollBottom = useRef(true);
-  // const [forScrollRefRender, setForScrollRefRender] = useState(null);
   const [monitorReceiving, setMonitorReceiving] = useState(false);
-  const observerTargetEl = useRef(null);
-  // const check = useRef(true);
   const [isScrollBottom, setIsScrollBottom] = useState(true);
+  const observerTargetEl = useRef(null);
+  // const [forScrollRefRender, setForScrollRefRender] = useState(null);
+  // const isScrollBottom = useRef(true);
+  // const check = useRef(true);
 
-  // 쿼리 파라미터의 값을 가져옴
-  const withId = searchParams.get('withId');
-  const withUsername = searchParams.get('withUsername');
-  const withProfileImg = searchParams.get('writerImg');
-
-  const loginIdProfileImg = getCookie('profile-img');
-  // const loginIdProfileImg = JSON.parse(localStorage.getItem('profile-img'));
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -44,7 +42,7 @@ const ChatRoom = () => {
       msg: `${inputValue}`,
       roomId: `${id}`,
       from: `${loginId}`,
-      to: `${withId}`,
+      to: `${withId.current[0]}`,
       whenSend: `${new Date()}`,
     });
 
@@ -56,16 +54,26 @@ const ChatRoom = () => {
   };
 
   const getFirstData = async () => {
-    const mountData = await fetch(`${process.env.REACT_APP_SERVER_URL}/chat/${id}`, {
+    const chatRoomDocument = await fetch(`${process.env.REACT_APP_SERVER_URL}/chat/${id}?loginId=${loginId}`, {
       method: 'GET',
     }).then((r) => r.json());
 
-    // console.log(mountData);
 
-    if (mountData.canJoin) {
-      setChatState(mountData.chatData);
+    const isParticipating = chatRoomDocument[0].member.includes(loginId);
+    if ( isParticipating ) { // 대화 참여자가 맞으면
+
+      withProfileImg.current = chatRoomDocument[0].memberProfileImages.filter((i) => i !== `${loginIdProfileImg}`);
+      withId.current = chatRoomDocument[0].member.filter((i) => i !== `${loginId}`);
+      withUsername.current = chatRoomDocument[0].memberUsernames.filter((i) => i !== `${loginIdAccountname}`)
+      const chatData = chatRoomDocument[0].chatData;
+
+      setChatState(chatData);
       setToggle(true);
-    } else navigate('/Home');
+
+    } else {
+      navigate("/chat");
+    }
+
   };
 
   const toNewChat = () => {
@@ -89,14 +97,11 @@ const ChatRoom = () => {
         // setForScrollRefRender(isScrollBottom.current);
         setIsScrollBottom(true);
         setMonitorReceiving(false);
-        // console.log('isScrollBottom', isScrollBottom.current);
       } else {
         // console.log('떼어지는 조건식');
         // isScrollBottom.current = false;
         // setForScrollRefRender(isScrollBottom.current);
         setIsScrollBottom(false);
-        // console.log('isScrollBottom', isScrollBottom.current);
-        // console.log(forScrollRefRender);
       }
       
     });
@@ -130,7 +135,7 @@ const ChatRoom = () => {
         window.scrollTo(0, document.body.scrollHeight);
       }
 
-      if (lastChatingData.from === withId) {
+      if (lastChatingData.from === withId.current[0]) {
         if (isScrollBottom) {
           // 채팅창 스크롤이 가장 하단에 있는데 상대에게 메세지가 온경우 -> 반대로 스크롤이 위에있을 경우엔 상대메세지가 와도 스크롤 다운이 일어나지 않음
           window.scrollTo(0, document.body.scrollHeight);
@@ -147,7 +152,7 @@ const ChatRoom = () => {
 
   return (
     <>
-      <ChatHeader withUsername={withUsername} />
+      <ChatHeader withUsername={withUsername.current[0]} />
 
       <S.Content>
         <S.ChatContents>
@@ -172,12 +177,12 @@ const ChatRoom = () => {
                   <S.SomeoneChat key={i}>
                     <S.ProfileImg
                       src={
-                        withProfileImg.includes('mandarin.api')
-                          ? withProfileImg.replace(
+                        withProfileImg.current[0].includes('mandarin.api')
+                          ? withProfileImg.current[0].replace(
                               'mandarin.api',
                               'api.mandarin',
                             )
-                          : withProfileImg
+                          : withProfileImg.current[0]
                       }
                       alt='프로필 이미지'
                     />
@@ -192,17 +197,17 @@ const ChatRoom = () => {
       {monitorReceiving &&
       // !isScrollBottom.current &&
       !isScrollBottom &&
-      chatState[chatState.length - 1].from === withId ? (
+      chatState[chatState.length - 1].from === withId.current[0] ? (
         <S.ToRecentChat onClick={toNewChat}>
           <S.RecentChatProfileImg
             src={
-              withProfileImg.includes('mandarin.api')
-                ? withProfileImg.replace('mandarin.api', 'api.mandarin')
-                : withProfileImg
+              withProfileImg.current[0].includes('mandarin.api')
+                ? withProfileImg.current[0].replace('mandarin.api', 'api.mandarin')
+                : withProfileImg.current[0]
             }
             alt='최근 채팅 보낸이 프로필 이미지'
           />
-          <S.RecentChatUsername>{withUsername}</S.RecentChatUsername>
+          <S.RecentChatUsername>{withUsername.current[0]}</S.RecentChatUsername>
           <S.RecentChatContents>
             {chatState[chatState.length - 1].msg}
           </S.RecentChatContents>

@@ -7,7 +7,6 @@ import { getCookie } from '../../../cookie';
 const CommentInput = ({ postId, setComments }) => {
   const dispatch = useDispatch();
   const image = getCookie('profile-img');
-  // const image = JSON.parse(localStorage.getItem('profile-img'));
   const [txt, setTxt] = useState('');
 
   const onChangeInput = (e) => {

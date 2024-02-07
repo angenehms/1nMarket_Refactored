@@ -32,7 +32,6 @@ const PostForm = ({ content, setContent, imgFiles, setImgFiles }) => {
   };
 
   const profileImg = getCookie('profile-img');
-  // const profileImg = JSON.parse(localStorage.getItem('profile-img'));
 
   return (
     <S.Conatiner>

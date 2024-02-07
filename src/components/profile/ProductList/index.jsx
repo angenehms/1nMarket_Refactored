@@ -19,7 +19,7 @@ const ProductList = () => {
     })
   })
 
-  // useEffect(() => {
+  // useEffect(() => { // 위 useQuery 로 대체
   //   const getProductList = async () => {
   //     const {
   //       data: { product },

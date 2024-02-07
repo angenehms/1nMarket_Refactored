@@ -6,7 +6,6 @@ import { getCookie } from '../../cookie';
 const Public = () => {
   const navigate = useNavigate();
   const token = getCookie('token');
-  // const token = JSON.parse(localStorage.getItem('token'));
 
   useEffect(() => {
     if (token) navigate('/home');

@@ -18,7 +18,6 @@ const ProductModify = () => {
   const navigate = useNavigate();
   const { productId } = useParams();
   const accountName = getCookie('accountname');
-  // const accountName = JSON.parse(localStorage.getItem('accountname'));
 
   useEffect(() => {
     if (!state) navigate('/home');
